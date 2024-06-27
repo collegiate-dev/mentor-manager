@@ -8,14 +8,26 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+function TopNav() {
+  return (
+    <nav className="flex w-full items-center justify-between border-b bg-gray-800 p-4 text-xl font-semibold text-white">
+      <div> Mentor Manager</div>
+      <div> Sign in</div>
+    </nav>
+  );
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+    <html lang="en">
+      <body className={`${GeistSans.variable}`}>
+        <TopNav />
+        {children}
+      </body>
     </html>
   );
 }

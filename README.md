@@ -2,7 +2,8 @@
 
 ## TODO
 
-- [x] Make it deploy (vercel)
+- [x] make it deploy (vercel)
 - [x] scaffold basic UI
-- [ ] Set up a database (vercel postgres)
-- [ ] Add authentication (clerk)
+- [x] tidy up build
+- [ ] set up a database (vercel postgres)
+- [ ] add authentication (clerk)

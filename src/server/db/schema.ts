@@ -1,14 +1,5 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
-import { sql } from "drizzle-orm";
-import {
-  index,
-  pgTableCreator,
-  serial,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { integer, serial, varchar } from "drizzle-orm/pg-core";
+import { pgTableCreator, index, foreignKey } from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -16,19 +7,48 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `mentor-manager_${name}`);
+export const createTable = pgTableCreator((name) => `mentor_manager_${name}`);
 
-export const posts = createTable(
-  "post",
+// Students table
+export const students = createTable(
+  "students",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true }),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
+);
+
+// Matches table
+export const matches = createTable(
+  "matches",
+  {
+    id: serial("id").primaryKey(),
+    mentorId: varchar("mentorId", { length: 256 }),
+    studentId: integer("studentId")
+      .notNull()
+      .references(() => students.id),
+    totalMeetings: integer("totalMeetings"),
+    meetingsCompleted: integer("meetingsCompleted"),
+  },
+  (example) => ({
+    mentorIdIndex: index("mentorId_idx").on(example.mentorId),
+    studentIdIndex: index("studentId_idx").on(example.studentId),
+  }),
+);
+
+// Meetings table
+export const meetings = createTable(
+  "meetings",
+  {
+    id: serial("id").primaryKey(),
+    matchId: integer("matchId")
+      .notNull()
+      .references(() => matches.id),
+  },
+  (example) => ({
+    matchIdIndex: index("matchId_idx").on(example.matchId),
+  }),
 );

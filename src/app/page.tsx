@@ -3,14 +3,14 @@ import { db } from "~/server/db";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const posts = await db.query.posts.findMany();
+  const matches = await db.query.matches.findMany();
 
-  console.log(posts);
+  console.log("matches", matches);
   return (
     <main className="">
       <div className="flex flex-wrap gap-4">
-        {posts.map((post) => (
-          <div key={post.id}>{post.name}</div>
+        {matches.map((match) => (
+          <div key={match.studentId}>{match.studentId}</div>
         ))}
       </div>
     </main>

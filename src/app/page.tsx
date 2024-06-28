@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, useAuth } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { getMatchesByMentorId } from "~/api/getMentorMatches";
 import {
   Table,
@@ -10,10 +10,15 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { getStudent } from "~/api/getStudent";
+import { auth } from "@clerk/nextjs/server";
 export const dynamic = "force-dynamic";
 
 async function Matches() {
-  const matches = await getMatchesByMentorId("100");
+  const { userId } = auth() as { userId: string };
+  if (!userId) {
+    return <div>Please log in to view matches</div>;
+  }
+  const matches = await getMatchesByMentorId(userId);
 
   const studentDataPromises = matches.map(async (match) => {
     const student = await getStudent(match.studentId);
@@ -27,6 +32,7 @@ async function Matches() {
 
   return (
     <div className="flex flex-wrap gap-4">
+      <p>{userId}</p>
       <Table>
         <TableCaption>A list of all current matchings</TableCaption>
         <TableHeader>

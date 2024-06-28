@@ -1,18 +1,81 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { db } from "~/server/db";
-
+import { SignedIn, SignedOut, useAuth } from "@clerk/nextjs";
+import { getMatchesByMentorId } from "~/api/getMentorMatches";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import { getStudent } from "~/api/getStudent";
 export const dynamic = "force-dynamic";
 
 async function Matches() {
-  const matches = await db.query.matches.findMany();
+  const matches = await getMatchesByMentorId("100");
+
+  const studentDataPromises = matches.map(async (match) => {
+    const student = await getStudent(match.studentId);
+    return {
+      ...match,
+      studentName: student ? student.name : "Unknown",
+    };
+  });
+
+  const matchesWithStudentNames = await Promise.all(studentDataPromises);
+
   return (
     <div className="flex flex-wrap gap-4">
-      {matches.map((match) => (
-        <div key={match.studentId}>{match.studentId}</div>
-      ))}
+      <Table>
+        <TableCaption>A list of all current matchings</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student Name</TableHead>
+            <TableHead>Meetings Completed</TableHead>
+            <TableHead>Total Meetings</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {matchesWithStudentNames.map((match) => (
+            <TableRow key={match.studentId}>
+              <TableCell className="font-medium">{match.studentName}</TableCell>
+              <TableCell>{match.meetingsCompleted}</TableCell>
+              <TableCell>{match.totalMeetings}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
+
+// async function Matches() {
+//   const matches = await getMatchesByMentorId("100");
+//   return (
+//     <div className="flex flex-wrap gap-4">
+//       <Table>
+//         <TableCaption>A list of all current matchings</TableCaption>
+//         <TableHeader>
+//           <TableRow>
+//             <TableHead>Student Name</TableHead>
+//             <TableHead>Meetings Completed</TableHead>
+//             <TableHead>Total Meetings</TableHead>
+//           </TableRow>
+//         </TableHeader>
+//         <TableBody>
+//           {matches.map((match) => (
+//             <TableRow key={match.studentId}>
+//               <TableCell className="font-medium">{match.studentId}</TableCell>
+//               <TableCell>{match.meetingsCompleted}</TableCell>
+//               <TableCell>{match.totalMeetings}</TableCell>
+//             </TableRow>
+//           ))}
+//         </TableBody>
+//       </Table>
+//     </div>
+//   );
+// }
 
 export default async function HomePage() {
   return (

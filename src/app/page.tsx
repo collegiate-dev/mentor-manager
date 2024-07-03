@@ -11,6 +11,7 @@ import {
 } from "~/components/ui/table";
 import { getStudent } from "~/api/getStudent";
 import { auth } from "@clerk/nextjs/server";
+import { TallyPM } from "./_components/tally";
 export const dynamic = "force-dynamic";
 
 async function Matches() {

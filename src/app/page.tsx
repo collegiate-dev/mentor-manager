@@ -31,8 +31,13 @@ async function Matches() {
 
   const matchesWithStudentNames = await Promise.all(studentDataPromises);
 
+  const handleButtonClick = () => {
+    console.log("Button clicked!");
+    // Add your logic here
+  };
+
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex w-1/2 flex-wrap gap-4">
       <p>{userId}</p>
       <Table>
         <TableCaption>A list of all current matchings</TableCaption>
@@ -41,6 +46,7 @@ async function Matches() {
             <TableHead>Student Name</TableHead>
             <TableHead>Meetings Completed</TableHead>
             <TableHead>Total Meetings</TableHead>
+            <TableHead>Mark Complete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -49,6 +55,14 @@ async function Matches() {
               <TableCell className="font-medium">{match.studentName}</TableCell>
               <TableCell>{match.meetingsCompleted}</TableCell>
               <TableCell>{match.totalMeetings}</TableCell>
+              <TableCell>
+                <button
+                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                  onClick={handleButtonClick}
+                >
+                  Select
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

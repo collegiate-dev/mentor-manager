@@ -47,6 +47,8 @@ export const meetings = createTable(
     matchId: integer("matchId")
       .notNull()
       .references(() => matches.id),
+    estimatedTime: integer("estimatedTime"),
+    meetingNotes: varchar("meetingNotes", { length: 1000 }),
   },
   (example) => ({
     matchIdIndex: index("matchId_idx").on(example.matchId),

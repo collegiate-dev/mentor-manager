@@ -11,8 +11,8 @@ import {
 } from "~/components/ui/table";
 import { getStudent } from "~/api/getStudent";
 import { auth } from "@clerk/nextjs/server";
-import { TallyPM } from "./_components/tally";
 export const dynamic = "force-dynamic";
+// import React, { useState } from "react";
 
 async function Matches() {
   const { userId } = auth() as { userId: string };
@@ -30,11 +30,6 @@ async function Matches() {
   });
 
   const matchesWithStudentNames = await Promise.all(studentDataPromises);
-
-  const handleButtonClick = () => {
-    console.log("Button clicked!");
-    // Add your logic here
-  };
 
   return (
     <div className="flex w-1/2 flex-wrap gap-4">
@@ -58,7 +53,7 @@ async function Matches() {
               <TableCell>
                 <button
                   className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-                  onClick={handleButtonClick}
+                  // onClick={handleButtonClick}
                 >
                   Select
                 </button>
@@ -71,34 +66,12 @@ async function Matches() {
   );
 }
 
-// async function Matches() {
-//   const matches = await getMatchesByMentorId("100");
-//   return (
-//     <div className="flex flex-wrap gap-4">
-//       <Table>
-//         <TableCaption>A list of all current matchings</TableCaption>
-//         <TableHeader>
-//           <TableRow>
-//             <TableHead>Student Name</TableHead>
-//             <TableHead>Meetings Completed</TableHead>
-//             <TableHead>Total Meetings</TableHead>
-//           </TableRow>
-//         </TableHeader>
-//         <TableBody>
-//           {matches.map((match) => (
-//             <TableRow key={match.studentId}>
-//               <TableCell className="font-medium">{match.studentId}</TableCell>
-//               <TableCell>{match.meetingsCompleted}</TableCell>
-//               <TableCell>{match.totalMeetings}</TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </div>
-//   );
-// }
-
 export default async function HomePage() {
+  // const [matchId, setMatchId] = useState("");
+  // const [studentName, setStudentName] = useState("");
+  // const [mentorName, setMentorName] = useState("");
+  // const [showTallyPM, setShowTallyPM] = useState(false);
+
   return (
     <main className="">
       <SignedIn>

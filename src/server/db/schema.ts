@@ -1,5 +1,5 @@
 import { integer, serial, varchar } from "drizzle-orm/pg-core";
-import { pgTableCreator, index, foreignKey } from "drizzle-orm/pg-core";
+import { pgTableCreator, index } from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same

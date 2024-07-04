@@ -1,0 +1,170 @@
+{
+  "id": "66d2f834-449a-45a9-acfe-fe3bba1ce07c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.mentor_manager_matches": {
+      "name": "mentor_manager_matches",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "mentorId": {
+          "name": "mentorId",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "studentId": {
+          "name": "studentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalMeetings": {
+          "name": "totalMeetings",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meetingsCompleted": {
+          "name": "meetingsCompleted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "mentorId_idx": {
+          "name": "mentorId_idx",
+          "columns": [
+            "mentorId"
+          ],
+          "isUnique": false
+        },
+        "studentId_idx": {
+          "name": "studentId_idx",
+          "columns": [
+            "studentId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "mentor_manager_matches_studentId_mentor_manager_students_id_fk": {
+          "name": "mentor_manager_matches_studentId_mentor_manager_students_id_fk",
+          "tableFrom": "mentor_manager_matches",
+          "tableTo": "mentor_manager_students",
+          "columnsFrom": [
+            "studentId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.mentor_manager_meetings": {
+      "name": "mentor_manager_meetings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "matchId": {
+          "name": "matchId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estimatedTime": {
+          "name": "estimatedTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meetingNotes": {
+          "name": "meetingNotes",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "matchId_idx": {
+          "name": "matchId_idx",
+          "columns": [
+            "matchId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "mentor_manager_meetings_matchId_mentor_manager_matches_id_fk": {
+          "name": "mentor_manager_meetings_matchId_mentor_manager_matches_id_fk",
+          "tableFrom": "mentor_manager_meetings",
+          "tableTo": "mentor_manager_matches",
+          "columnsFrom": [
+            "matchId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.mentor_manager_students": {
+      "name": "mentor_manager_students",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

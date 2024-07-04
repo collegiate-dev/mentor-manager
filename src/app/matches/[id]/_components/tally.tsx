@@ -1,44 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getMatchById } from "~/api/getMatch";
-import { getStudent } from "~/api/getStudent";
+import React from "react";
 
 export interface TallyPMProps {
   id: string;
+  studentName: string;
+  mentorName: string;
 }
 
-export const TallyPM = ({ id }: TallyPMProps) => {
-  const [studentName, setStudentName] = useState<string>("");
-
-  useEffect(() => {
-    const fetchStudentName = async () => {
-      try {
-        const matchId = Number(id);
-        if (isNaN(matchId)) {
-          setStudentName("Invalid ID");
-          return;
-        }
-
-        const match = await getMatchById(matchId);
-        if (match) {
-          const student = await getStudent(match.studentId);
-          setStudentName(student?.name ?? "Unknown");
-        } else {
-          setStudentName("Match not found");
-        }
-      } catch (error) {
-        console.error("Error fetching student:", error);
-        setStudentName("Error fetching student");
-      }
-    };
-
-    fetchStudentName().catch((error) => {
-      console.error("Unexpected error:", error);
-      setStudentName("Error fetching student");
-    });
-  }, [id]);
-
+export const TallyPM = ({ id, studentName, mentorName }: TallyPMProps) => {
   return (
     <div
       style={{
@@ -50,7 +20,7 @@ export const TallyPM = ({ id }: TallyPMProps) => {
       }}
     >
       <iframe
-        src={`https://tally.so/r/mB1vEe?transparentBackground=1&id=${id}&studentName=${studentName}`}
+        src={`https://tally.so/r/mB1vEe?transparentBackground=1&id=${id}&studentName=${studentName}&mentorName=${mentorName}`}
         style={{
           width: "100%",
           height: "100%",

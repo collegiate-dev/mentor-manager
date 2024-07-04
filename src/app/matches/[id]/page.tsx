@@ -1,12 +1,45 @@
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { TallyPM } from "./_components/tally";
+import { getMatchById } from "~/api/getMatch";
+import { getStudent } from "~/api/getStudent";
+import { SignInPage } from "~/components/signInPage";
+import { getUserFirstName } from "~/api/getUserFirstName";
 
-export default function PM({ params }: { params: { id: string } }) {
-  if (!params.id)
-    return <div>Invalid. Contact Ishaan for support ishaan@collegiate.dev</div>;
+export default async function PM({ params }: { params: { id: string } }) {
+  const matchId = Number(params.id);
+
+  if (isNaN(matchId)) {
+    return (
+      <div>Invalid. Contact Ishaan for support at ishaan@collegiate.dev</div>
+    );
+  }
+
+  const match = await getMatchById(matchId);
+  let studentName = "Unknown";
+
+  if (match) {
+    const student = await getStudent(match.studentId);
+    studentName = student?.name ?? "Unknown";
+  } else {
+    studentName = "Match not found";
+  }
+  const mentorName = await getUserFirstName();
+  if (!mentorName) {
+    return <div>Name not found</div>;
+  }
 
   return (
     <main>
-      <TallyPM id={params.id} />
+      <SignedIn>
+        <TallyPM
+          id={params.id}
+          studentName={studentName}
+          mentorName={mentorName}
+        />
+      </SignedIn>
+      <SignedOut>
+        <SignInPage />
+      </SignedOut>
     </main>
   );
 }

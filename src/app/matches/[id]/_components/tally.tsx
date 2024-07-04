@@ -20,7 +20,7 @@ export const TallyPM = ({ id, studentName, mentorName }: TallyPMProps) => {
       }}
     >
       <iframe
-        src={`https://tally.so/r/mB1vEe?transparentBackground=1&id=${id}&studentName=${studentName}&mentorName=${mentorName}`}
+        src={`https://tally.so/r/mB1vEe?transparentBackground=1&matchId=${id}&studentName=${studentName}&mentorName=${mentorName}`}
         style={{
           width: "100%",
           height: "100%",

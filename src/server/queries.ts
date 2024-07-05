@@ -10,7 +10,7 @@ import { meetings } from "./db/schema";
 //   return await db.insert(meetings).values(meeting);
 // });
 
-export const addMeeting = async (meeting: Meeting) => {
+export const addMeeting = async (meeting: InsertMeeting) => {
   try {
     return await db.insert(meetings).values(meeting);
   } catch (error) {
@@ -19,11 +19,7 @@ export const addMeeting = async (meeting: Meeting) => {
   }
 };
 
-export interface Meeting {
-  matchId: number;
-  estimatedTime: number; // make mandatory
-  meetingNotes: string; // decide
-}
+export type InsertMeeting = typeof meetings.$inferInsert;
 
 // export const getMyTask = userAuth(async (authContext, imgId: number) => {
 //   const { userId } = authContext;

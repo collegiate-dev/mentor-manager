@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../_utils/handler";
-import { addMeeting, type Meeting } from "~/server/queries";
+import { addMeeting, type InsertMeeting } from "~/server/queries";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
@@ -14,8 +14,8 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 });
 
 // Function to map the body.data.fields array to a Meeting object
-const mapFieldsToMeeting = (fields: EventField[]): Meeting => {
-  const meeting: Partial<Meeting> = {};
+const mapFieldsToMeeting = (fields: EventField[]): InsertMeeting => {
+  const meeting: Partial<InsertMeeting> = {};
 
   fields.forEach((field) => {
     if (field.label === "matchId") {
@@ -36,7 +36,7 @@ const mapFieldsToMeeting = (fields: EventField[]): Meeting => {
     throw new Error("Missing required fields: matchId and/or estimatedTime");
   }
 
-  return meeting as Meeting;
+  return meeting as InsertMeeting;
 };
 
 type TallyMeetingEvent = {

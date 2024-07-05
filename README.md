@@ -10,7 +10,10 @@
 - [x] create endpoints for database
 - [x] create button to submit tally
 - [ ] increase meeting count by 1 when tally is submitted
-- [ ] link table row in (/students) to view of meetings info from meetings db
 - [ ] create mentors db and add clerkid and name when a user signs up
 - [ ] (clerk roles) make an admin view where collegiate can create matches by specifying mentor, student, total meetings
+
+## 1.1 TODO
+
 - [ ] update payroll form or stage in mercury
+- [ ] link table row in (/students) to view of meetings info from meetings db

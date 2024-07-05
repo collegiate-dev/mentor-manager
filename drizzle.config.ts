@@ -9,4 +9,5 @@ export default {
     url: env.POSTGRES_URL,
   },
   tablesFilter: ["mentor-manager_*"],
+  out: "./src/server/db/migrations",
 } satisfies Config;

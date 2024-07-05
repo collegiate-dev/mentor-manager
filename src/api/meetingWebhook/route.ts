@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/vercel-postgres";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 import { meetings } from "~/server/db/schema"; // Import the meetings schema
-import { WebhookPayload, WebhookField } from "~/server/db/types"; // Import the types
+import { type WebhookPayload, type WebhookField } from "~/server/db/types"; // Import the types
 
 // Initialize the Drizzle ORM
 const db = drizzle(sql);

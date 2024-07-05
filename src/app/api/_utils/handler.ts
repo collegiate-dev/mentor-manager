@@ -33,6 +33,9 @@ export const tallyHookHandler = <T>(handler: WebhookHandlerFunction<T>) => {
         .update(rawBody)
         .digest("base64");
 
+      console.log("calculated signature", calculatedSignature);
+      console.log("received signature", receivedSignature);
+
       if (receivedSignature === calculatedSignature) {
         // Signature is valid, process the webhook payload
         const body = JSON.parse(rawBody) as T;

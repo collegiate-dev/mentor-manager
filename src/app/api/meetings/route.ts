@@ -5,8 +5,6 @@ import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
-  console.log("meeting:", meeting);
-  await addMeeting(meeting);
 
   // Add the meeting to the meetings table
   await addMeeting(meeting);

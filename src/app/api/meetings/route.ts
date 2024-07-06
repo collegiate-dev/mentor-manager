@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
+import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
   console.log("meeting:", meeting);
   await addMeeting(meeting);
+
+  // Add the meeting to the meetings table
+  await addMeeting(meeting);
+
+  // Increment the meetingsCompleted count in the matches table
+  await incrementMeetingsCompleted(meeting.matchId);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

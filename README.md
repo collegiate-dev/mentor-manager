@@ -9,7 +9,7 @@
 - [x] add authentication (clerk)
 - [x] create endpoints for database
 - [x] create button to submit tally
-- [ ] increase meeting count by 1 when tally is submitted
+- [x] increase meeting count by 1 when tally is submitted
 - [ ] create mentors db and add clerkid and name when a user signs up
 - [ ] (clerk roles) make an admin view where collegiate can create matches by specifying mentor, student, total meetings
 

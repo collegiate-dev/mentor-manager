@@ -9,6 +9,20 @@ import { pgTableCreator, index } from "drizzle-orm/pg-core";
  */
 export const createTable = pgTableCreator((name) => `mentor_manager_${name}`);
 
+// Mentors table
+export const mentors = createTable(
+  "mentors",
+  {
+    id: varchar("id", { length: 256 }).primaryKey(),
+    email: varchar("email", { length: 256 }),
+    firstname: varchar("firstname", { length: 256 }),
+    lastname: varchar("lastname", { length: 256 }),
+  },
+  (example) => ({
+    emailIndex: index("email_idx").on(example.email),
+  }),
+);
+
 // Students table
 export const students = createTable(
   "students",

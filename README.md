@@ -11,6 +11,7 @@
 - [x] create button to submit tally
 - [x] increase meeting count by 1 when tally is submitted
 - [ ] create mentors db and add clerkid and name when a user signs up
+- [ ] add roles and middleware to protect routes (https://clerk.com/docs/references/nextjs/clerk-middleware)
 - [ ] (clerk roles) make an admin view where collegiate can create matches by specifying mentor, student, total meetings
 
 ## 1.1 TODO

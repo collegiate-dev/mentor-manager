@@ -1,6 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { type WebhookEvent } from "@clerk/nextjs/server";
+import { type UserJSON, type WebhookEvent } from "@clerk/nextjs/server";
+import { addMentor } from "~/api/queries";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
   }
 
   // Get the body
-  const payload = await req.json();
+  const payload: UserJSON = await req.json();
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
@@ -56,7 +57,26 @@ export async function POST(req: Request) {
   console.log("Webhook body:", body);
 
   if (evt.type === "user.created") {
-    console.log("userId:", evt.data.id);
+    const { id, email_addresses, first_name, last_name } = evt.data;
+    const email = email_addresses[0]?.email_address ?? "";
+    const firstname = first_name ?? "";
+    const lastname = last_name ?? "";
+
+    try {
+      await addMentor({
+        id: id,
+        email: email,
+        firstname: firstname,
+        lastname: lastname,
+      });
+
+      console.log(`Inserted mentor with ID ${id}`);
+    } catch (error) {
+      console.error("Error inserting into mentors table:", error);
+      return new Response("Error inserting data", {
+        status: 500,
+      });
+    }
   }
 
   return new Response("", { status: 200 });

@@ -31,7 +31,7 @@ export const TallyPM = ({ id, studentName, mentorName }: TallyPMProps) => {
           left: 0,
           border: "none",
         }}
-        title="Parent Insight Form"
+        title="Mentor Meeting Form"
       ></iframe>
     </div>
   );

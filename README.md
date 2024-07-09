@@ -23,6 +23,7 @@
 
 - [ ] If a user is updated on clerk updating info in db
 - [ ] Handle international onboarding for mercury
+- [ ] If tally form is submitted redirect back to the dashboard
 
 # Onboarding Instructions
 

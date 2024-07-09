@@ -32,7 +32,7 @@ const StudentsClient = ({ matches }: StudentsClientProps) => {
   }
 
   const handleButtonClick = (matchId: number) => {
-    router.push(`/completeMeeting/${matchId}`);
+    router.push(`/mentor/completeMeeting/${matchId}`);
   };
 
   return (

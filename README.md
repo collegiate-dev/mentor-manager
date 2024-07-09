@@ -18,3 +18,17 @@
 
 - [ ] update payroll form or stage in mercury
 - [ ] link table row in (/students) to view of meetings info from meetings db
+
+## V2
+
+- [ ] If a user is updated on clerk updating info in db
+- [ ] Handle international onboarding for mercury
+
+# Onboarding Instructions
+
+I am writing this out for initial testing purposes there should be a guided onboarding as there may be errors:
+
+1. Mentor Signs Up With Clerk
+2. Ensure that they are added to the mentors db in vercel-postgres under the mentors table
+3. Have them fill out the tally for mercury onboarding
+4. Ensure that the info is in vercel-postgres

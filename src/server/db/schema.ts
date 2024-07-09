@@ -1,4 +1,4 @@
-import { integer, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, jsonb, serial, varchar } from "drizzle-orm/pg-core";
 import { pgTableCreator, index } from "drizzle-orm/pg-core";
 
 /**
@@ -17,6 +17,11 @@ export const mentors = createTable(
     email: varchar("email", { length: 256 }),
     firstname: varchar("firstname", { length: 256 }),
     lastname: varchar("lastname", { length: 256 }),
+    paymentMethod: varchar("paymentMethod", { length: 50 }),
+    electronicRoutingInfo: jsonb("electronicRoutingInfo"),
+    electronicAccountType: varchar("electronicAccountType", { length: 50 }),
+    routingNumber: varchar("routingNumber", { length: 9 }),
+    accountNumber: varchar("accountNumber", { length: 17 }),
   },
   (example) => ({
     emailIndex: index("email_idx").on(example.email),

@@ -1,41 +1,28 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { TallyMercury } from "./_components/tally";
 import { SignInPage } from "~/components/signInPage";
-import { getMentorDetails, type MentorDetails } from "~/api/queries";
+import { getMentorDetails } from "~/api/queries";
+import { auth } from "@clerk/nextjs/server";
 
-export default function MercurySetup() {
-  const { user } = useUser();
-  const userId = user?.id;
+export default async function MercurySetup() {
+  const { userId } = auth();
 
-  const [mentorDetails, setMentorDetails] = useState<MentorDetails | null>(
-    null,
-  );
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (userId) {
-      getMentorDetails(userId)
-        .then((details) => {
-          setMentorDetails(details);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching mentor details:", error);
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [userId]);
-
-  if (loading) {
-    return <p>Loading...</p>;
+  if (!userId) {
+    return (
+      <main>
+        <SignedOut>
+          <SignInPage />
+        </SignedOut>
+        <SignedIn>
+          <p>User details not found</p>
+        </SignedIn>
+      </main>
+    );
   }
 
-  if (!userId || !mentorDetails) {
+  const mentorDetails = await getMentorDetails(userId);
+
+  if (!mentorDetails) {
     return (
       <main>
         <SignedOut>

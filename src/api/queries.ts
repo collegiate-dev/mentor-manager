@@ -75,7 +75,16 @@ export type MentorDetails = {
   accountNumber: string | null;
 };
 
-type Address = {
+export type MentorMercury = {
+  mentor: MentorDetails;
+  paymentMethod: string;
+  electronicRoutingInfo: ElectronicRoutingInfo;
+  electronicAccountType: string;
+  routingNumber: string;
+  accountNumber: string;
+};
+
+export type Address = {
   country: string;
   postalCode: string;
   region: string;
@@ -83,6 +92,4 @@ type Address = {
   address1: string;
 };
 
-type ElectronicRoutingInfo = {
-  address: Address;
-};
+export type ElectronicRoutingInfo = Address;

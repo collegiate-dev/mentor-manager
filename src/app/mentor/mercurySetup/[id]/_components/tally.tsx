@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 
-import React from "react";
+// import React, { useEffect } from "react";
+// import { retrieveField } from "~/lib/utils";
 
 export interface TallyMercuryProps {
   id: string;
@@ -9,6 +11,19 @@ export interface TallyMercuryProps {
 }
 
 export const TallyMercury = ({ id, name, email }: TallyMercuryProps) => {
+  // useEffect(() => {
+  //   const handleFormSubmit = (event: MessageEvent) => {
+  //     try {
+  //       const data = JSON.parse(event.data as string);
+  //       if (data.event === "Tally.FormSubmitted") {
+  //         const concentration = retrieveField(data, "concentration");
+  //       }
+  //     } catch (error) {}
+  //   };
+  //   window.addEventListener("message", handleFormSubmit);
+  //   return () => window.removeEventListener("message", handleFormSubmit);
+  // }, []);
+
   return (
     <div
       style={{

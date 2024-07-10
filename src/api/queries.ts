@@ -42,43 +42,49 @@ export const getMentorDetails = async (
   return result[0] as MentorDetails;
 };
 
-export const updateMentor = async (
-  mentorId: string,
-  updateData: {
-    email?: string;
-    firstname?: string;
-    lastname?: string;
-    paymentMethod?: string;
-    electronicRoutingInfo?: ElectronicRoutingInfo;
-    electronicAccountType?: string;
-    routingNumber?: string;
-    accountNumber?: string;
-  },
-) => {
-  if (!mentorId) {
+// Updated function to update mercury info
+export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
+  if (!mentorDetails.id) {
     throw new Error("mentorId is required");
   }
-  await db.update(mentors).set(updateData).where(eq(mentors.id, mentorId));
+
+  const {
+    paymentMethod,
+    electronicRoutingInfo,
+    electronicAccountType,
+    routingNumber,
+    accountNumber,
+  } = mentorDetails;
+
+  await db
+    .update(mentors)
+    .set({
+      paymentMethod,
+      electronicRoutingInfo,
+      electronicAccountType,
+      routingNumber,
+      accountNumber,
+    })
+    .where(eq(mentors.id, mentorDetails.id));
 };
 
-//Types
+// Types
 export type MentorDetails = {
   id: string;
   email: string;
-  firstname: string;
-  lastname: string;
   fullname: string;
   paymentMethod: string | null;
-  electronicRoutingInfo: ElectronicRoutingInfo | null;
+  electronicRoutingInfo: Address | null;
   electronicAccountType: string | null;
   routingNumber: string | null;
   accountNumber: string | null;
 };
 
 export type MentorMercury = {
-  mentor: MentorDetails;
+  emails: string[];
+  name: string;
   paymentMethod: string;
-  electronicRoutingInfo: ElectronicRoutingInfo;
+  electronicRoutingInfo: Address;
   electronicAccountType: string;
   routingNumber: string;
   accountNumber: string;
@@ -90,6 +96,32 @@ export type Address = {
   region: string;
   city: string;
   address1: string;
+  address2?: string | null;
 };
 
-export type ElectronicRoutingInfo = Address;
+export type ElectronicRoutingInfo = {
+  accountNumber: string;
+  routingNumber: string;
+  bankName?: string | null;
+  electronicAccountType:
+    | "businessChecking"
+    | "businessSavings"
+    | "personalChecking"
+    | "personalSavings";
+  address: Address;
+};
+
+export type MercuryResponse = {
+  id: string;
+  name: string;
+  nickname?: string | null;
+  status: "active" | "deleted";
+  emails: string[];
+  dateLastPaid?: string | null;
+  defaultPaymentMethod: "ACH" | "Check" | "DomesticWire" | "InternationalWire";
+  electronicRoutingInfo?: ElectronicRoutingInfo | null;
+  domesticWireRoutingInfo?: any | null; // Add specific types if needed
+  internationalWireRoutingInfo?: any | null; // Add specific types if needed
+  checkInfo?: any | null; // Add specific types if needed
+  address?: any | null; // Deprecated, add specific types if needed
+};

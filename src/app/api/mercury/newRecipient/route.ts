@@ -1,29 +1,26 @@
 import { type NextRequest, NextResponse } from "next/server";
 import fetch from "node-fetch";
+import { type MentorDetails, type MercuryResponse } from "~/api/queries";
 
-export async function POST(request: NextRequest) {
+export async function addRecipientToMercury(
+  mentorDetails: MentorDetails,
+): Promise<MercuryResponse> {
   const url = "https://backend.mercury.com/api/v1/recipients";
   const apiToken = process.env.MERCURY_SECRET_TOKEN;
 
-  const requestData = await request.json();
-
   const payload = {
-    emails: ["test@example.com"],
-    name: "Test Recipe Recipient",
-    paymentMethod: "electronic",
+    emails: [mentorDetails.email],
+    name: mentorDetails.fullname,
+    paymentMethod: mentorDetails.paymentMethod,
     electronicRoutingInfo: {
-      address: {
-        country: "US",
-        postalCode: "94103",
-        region: "CA",
-        city: "San Francisco",
-        address1: "1335 Folsom",
-      },
-      electronicAccountType: "businessChecking",
-      routingNumber: "021000021",
-      accountNumber: "3111152261278",
+      address: mentorDetails.electronicRoutingInfo,
+      electronicAccountType: mentorDetails.electronicAccountType,
+      routingNumber: mentorDetails.routingNumber?.toString() ?? "", // Ensure it's a string
+      accountNumber: mentorDetails.accountNumber,
     },
   };
+
+  console.log("Payload:", payload); // Log the payload
 
   const options = {
     method: "POST",
@@ -38,9 +35,46 @@ export async function POST(request: NextRequest) {
   try {
     const response = await fetch(url, options);
     const json = await response.json();
-    return NextResponse.json(json);
+    console.log("Mercury Response:", json);
+    return json as MercuryResponse;
   } catch (err) {
-    console.error("error:", err);
+    console.error("Error adding recipient to Mercury:", err);
+    throw new Error("Error adding recipient to Mercury");
+  }
+}
+
+// Route handler that uses the reusable function
+export async function POST(request: NextRequest) {
+  try {
+    console.log("Request received");
+    const requestData = (await request.json()) as MentorDetails;
+    console.log("Request data parsed:", requestData);
+
+    const recipientData: MentorDetails = {
+      id: requestData.id,
+      email: requestData.email,
+      fullname: requestData.fullname,
+      paymentMethod: requestData.paymentMethod ?? "electronic",
+      electronicRoutingInfo: {
+        country: requestData.electronicRoutingInfo!.country ?? "US",
+        postalCode: requestData.electronicRoutingInfo!.postalCode,
+        region: requestData.electronicRoutingInfo!.region,
+        city: requestData.electronicRoutingInfo!.city,
+        address1: requestData.electronicRoutingInfo!.address1,
+      },
+      electronicAccountType: requestData.electronicAccountType ?? "",
+      routingNumber: requestData.routingNumber?.toString() ?? "", // Ensure it's a string
+      accountNumber: requestData.accountNumber ?? "",
+    };
+
+    // Log the type of routingNumber
+    console.log("Type of routingNumber:", typeof recipientData.routingNumber);
+    console.log("Recipient Data:", recipientData);
+
+    const result = await addRecipientToMercury(recipientData);
+    return NextResponse.json(result);
+  } catch (err) {
+    console.error("Error in POST handler:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

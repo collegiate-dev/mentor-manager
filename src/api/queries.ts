@@ -12,6 +12,22 @@ export const addMentor = async (mentor: {
   await db.insert(mentors).values(mentor);
 };
 
+export const addMercuryRecipientId = async (
+  mentorId: string,
+  mercuryRecipientId: string,
+) => {
+  if (!mentorId) {
+    throw new Error("mentorId is required");
+  }
+  if (!mercuryRecipientId) {
+    throw new Error("mercuryRecipientId is required");
+  }
+  await db
+    .update(mentors)
+    .set({ mercuryId: mercuryRecipientId })
+    .where(eq(mentors.id, mentorId));
+};
+
 export const getMentorDetails = async (
   mentorId: string,
 ): Promise<MentorDetails | null> => {

@@ -4,6 +4,7 @@ import {
   updateMercuryInfo,
   type MentorDetails,
   type Address,
+  addMercuryRecipientId,
 } from "~/api/queries";
 import { addRecipientToMercury } from "~/app/api/mercury/newRecipient/route";
 
@@ -24,6 +25,13 @@ export const POST = tallyHookHandler<TallyBankDetailsEvent>(async (body) => {
 
     // Send data to Mercury API to add a recipient
     const mercuryResponse = await addRecipientToMercury(mentorDetails);
+    // Update the mentor database with the mercuryId
+    if (mercuryResponse.id) {
+      await addMercuryRecipientId(mentorDetails.id, mercuryResponse.id);
+    } else {
+      throw new Error("Mercury response ID is missing");
+    }
+
     console.log("Mercury Response:", mercuryResponse);
 
     return NextResponse.json(

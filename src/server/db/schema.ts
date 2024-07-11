@@ -22,6 +22,7 @@ export const mentors = createTable(
     electronicAccountType: varchar("electronicAccountType", { length: 50 }),
     routingNumber: varchar("routingNumber", { length: 9 }),
     accountNumber: varchar("accountNumber", { length: 17 }),
+    mercuryId: varchar("mercuryId", { length: 256 }),
   },
   (example) => ({
     emailIndex: index("email_idx").on(example.email),

@@ -9,7 +9,7 @@ export async function sendMoneyToRecipient(
   memo?: string,
 ): Promise<MercuryResponse> {
   const accountId = process.env.MERCURY_ACCOUNT_ID;
-  const url = `https://backend.mercury.com/api/v1/account/${accountId}/transactions`;
+  const url = `https://backend.mercury.com/api/v1/account/${accountId}/request-send-money`;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const idempotencyKey: string = uuidv4();
   const apiToken = process.env.MERCURY_SEND_MONEY_TOKEN;

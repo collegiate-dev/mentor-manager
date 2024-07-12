@@ -28,6 +28,22 @@ export const addMercuryRecipientId = async (
     .where(eq(mentors.id, mentorId));
 };
 
+export const getRecipientIdByMentorId = async (
+  mentorId: string,
+): Promise<string | null> => {
+  const result = await db
+    .select({ mercuryId: mentors.mercuryId })
+    .from(mentors)
+    .where(eq(mentors.id, mentorId))
+    .limit(1);
+
+  if (result.mercuryId[0] === null) {
+    return null;
+  }
+
+  return result.mercuryId;
+};
+
 export const getMentorDetails = async (
   mentorId: string,
 ): Promise<MentorDetails | null> => {

@@ -10,17 +10,31 @@
 - [x] create endpoints for database
 - [x] create button to submit tally
 - [x] increase meeting count by 1 when tally is submitted
-- [ ] create mentors db and add clerkid and name when a user signs up
-- [ ] add roles and middleware to protect routes (https://clerk.com/docs/references/nextjs/clerk-middleware)
-- [ ] (clerk roles) make an admin view where collegiate can create matches by specifying mentor, student, total meetings
+- [x] create mentors db and add clerkid and name when a user signs up
 
 ## 1.1 TODO
 
-- [ ] update payroll form or stage in mercury
+- [x] add receipient to mercury
+- [x] stage payment in mercury
+
+## 1.2 TODO
+
+- [ ] add roles and middleware to protect routes (https://clerk.com/docs/references/nextjs/clerk-middleware)
+- [ ] fix TS and ES Lint issues (particular in route.ts)
+
+### Mercury Logic Improvements
+
+- [ ] when a user fills out thier mercury details add directly to mercury and only save the mercuryId (you do not need to save all the other info)
+
+### UI/UX Improvements
+
+- [ ] show complete banking info as a task - do not show students until this is complete
+- [ ] center sutdents matchings table
 - [ ] link table row in (/students) to view of meetings info from meetings db
 
 ## V2
 
+- [ ] (clerk roles) make an admin view where collegiate can create matches by specifying mentor, student, total meetings
 - [ ] If a user is updated on clerk updating info in db
 - [ ] Handle international onboarding for mercury
 - [ ] If tally form is submitted redirect back to the dashboard

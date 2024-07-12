@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import { v4 as uuidv4 } from "uuid";
 import { type MercuryResponse } from "~/api/queries";
 
-async function sendMoneyToRecipient(
+export async function sendMoneyToRecipient(
   recipientId: string,
   amount: number,
   memo?: string,
@@ -12,7 +12,7 @@ async function sendMoneyToRecipient(
   const url = `https://backend.mercury.com/api/v1/account/${accountId}/transactions`;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const idempotencyKey: string = uuidv4();
-  const apiToken = process.env.MERCURY_SECRET_TOKEN;
+  const apiToken = process.env.MERCURY_SEND_MONEY_TOKEN;
   const paymentMethod = "ach";
 
   if (!accountId) {

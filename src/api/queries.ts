@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { mentors } from "~/server/db/schema";
+import { matches, mentors } from "~/server/db/schema";
 import { sql } from "drizzle-orm";
 import { eq } from "drizzle-orm/expressions";
 
@@ -28,7 +28,7 @@ export const addMercuryRecipientId = async (
     .where(eq(mentors.id, mentorId));
 };
 
-export const getRecipientIdByMentorId = async (
+export const getMercuryIdByMentorId = async (
   mentorId: string,
 ): Promise<string | null> => {
   const result = await db
@@ -37,11 +37,28 @@ export const getRecipientIdByMentorId = async (
     .where(eq(mentors.id, mentorId))
     .limit(1);
 
-  if (result.mercuryId[0] === null) {
+  if (result.length === 0) {
     return null;
   }
 
-  return result.mercuryId;
+  return result[0]?.mercuryId ?? null;
+};
+
+// Function to get mentorId by matchId
+export const getMentorIdByMatchId = async (
+  matchId: number,
+): Promise<string | null> => {
+  const result = await db
+    .select({ mentorId: matches.mentorId })
+    .from(matches)
+    .where(eq(matches.id, matchId))
+    .limit(1);
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return result[0]?.mentorId ?? null;
 };
 
 export const getMentorDetails = async (

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
 import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
+import { sendMoneyToRecipient } from "../mercury/sendMoney/route";
+import { getMentorIdByMatchId, getMercuryIdByMentorId } from "~/api/queries";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
@@ -11,6 +13,24 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 
   // Increment the meetingsCompleted count in the matches table
   await incrementMeetingsCompleted(meeting.matchId);
+
+  const mentorId = await getMentorIdByMatchId(meeting.matchId);
+  if (mentorId === null) {
+    return NextResponse.json(
+      { message: "mentorId not found", data: null },
+      { status: 400 },
+    );
+  }
+  const mercuryId = await getMercuryIdByMentorId(mentorId);
+  if (mercuryId === null) {
+    return NextResponse.json(
+      { message: "mercuryId not found", data: null },
+      { status: 400 },
+    );
+  }
+
+  //schedules $25
+  await sendMoneyToRecipient(mercuryId, 25);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

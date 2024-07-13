@@ -2,6 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Button } from "~/components/ui/button";
 
 interface CompleteBankingButtonProps {
   userId: string;
@@ -17,7 +18,7 @@ const CompleteBankingButton: React.FC<CompleteBankingButtonProps> = ({
   };
 
   return (
-    <button onClick={handleButtonClick}>Complete Banking Information</button>
+    <Button onClick={handleButtonClick}>Complete Banking Information</Button>
   );
 };
 

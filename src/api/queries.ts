@@ -79,6 +79,7 @@ export const getMentorDetails = async (
       electronicAccountType: mentors.electronicAccountType,
       routingNumber: mentors.routingNumber,
       accountNumber: mentors.accountNumber,
+      mercuryId: mentors.mercuryId,
     })
     .from(mentors)
     .where(eq(mentors.id, mentorId))
@@ -127,6 +128,7 @@ export type MentorDetails = {
   electronicAccountType: string | null;
   routingNumber: string | null;
   accountNumber: string | null;
+  mercuryId: string | null;
 };
 
 export type MentorMercury = {

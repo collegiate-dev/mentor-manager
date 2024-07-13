@@ -4,12 +4,13 @@ import { getMentorDetails } from "~/api/queries";
 import { auth } from "@clerk/nextjs/server";
 import StudentsClient from "./_components/StudentsClient";
 import CompleteBankingButton from "./_components/CompleteBankingButton";
+import { SignInPage } from "~/components/signInPage";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
 
   if (!userId) {
-    return <div>Please log in to view matches</div>;
+    return <SignInPage />;
   }
 
   try {
@@ -21,13 +22,7 @@ export default async function StudentsPage() {
       return <div>Error fetching mentor details. Please try again later.</div>;
     }
 
-    const {
-      paymentMethod,
-      electronicRoutingInfo,
-      electronicAccountType,
-      routingNumber,
-      accountNumber,
-    } = mentorDetails;
+    const { mercuryId } = mentorDetails;
 
     console.log(`Fetching matches for userId: ${userId}`);
     const matches = await getMatchesByMentorId(userId);
@@ -48,12 +43,11 @@ export default async function StudentsPage() {
 
     return (
       <div>
-        {(!paymentMethod ||
-          !electronicRoutingInfo ||
-          !electronicAccountType ||
-          !routingNumber ||
-          !accountNumber) && <CompleteBankingButton userId={userId} />}
-        <StudentsClient matches={matchesWithStudentNames} />
+        {!mercuryId ? (
+          <CompleteBankingButton userId={userId} />
+        ) : (
+          <StudentsClient matches={matchesWithStudentNames} />
+        )}
       </div>
     );
   } catch (error) {

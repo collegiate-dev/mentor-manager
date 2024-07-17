@@ -42,7 +42,7 @@ export default async function StudentsPage() {
     );
 
     return (
-      <div>
+      <div className="flex flex-col items-center">
         {!mercuryId ? (
           <CompleteBankingButton userId={userId} />
         ) : (

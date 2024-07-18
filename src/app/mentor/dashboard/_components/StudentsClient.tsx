@@ -18,6 +18,7 @@ interface Match {
   studentId: number;
   totalMeetings: number | null;
   meetingsCompleted: number | null;
+  frequency: number | null;
 }
 
 interface StudentsClientProps {
@@ -44,6 +45,7 @@ const StudentsClient = ({ matches }: StudentsClientProps) => {
             <TableHead>Student Name</TableHead>
             <TableHead>Meetings Completed</TableHead>
             <TableHead>Total Meetings</TableHead>
+            <TableHead>Frequency</TableHead>
             <TableHead>Mark Complete</TableHead>
           </TableRow>
         </TableHeader>
@@ -53,6 +55,7 @@ const StudentsClient = ({ matches }: StudentsClientProps) => {
               <TableCell className="font-medium">{match.studentName}</TableCell>
               <TableCell>{match.meetingsCompleted}</TableCell>
               <TableCell>{match.totalMeetings}</TableCell>
+              <TableCell>{match.frequency}</TableCell>
               <TableCell>
                 <button
                   className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"

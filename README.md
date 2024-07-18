@@ -17,6 +17,12 @@
 - [x] add receipient to mercury
 - [x] stage payment in mercury
 
+## 1.11 Launch TODOS Counselors
+
+- [ ] host on digital ocean droplet
+- [ ] add studnets into database
+- [ ] create a way to manage when meetings are supposed to be (Dates and Frequency)
+
 ## 1.2 TODO
 
 - [ ] add roles and middleware to protect routes (https://clerk.com/docs/references/nextjs/clerk-middleware)

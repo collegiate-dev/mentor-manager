@@ -1,4 +1,4 @@
-import { integer, jsonb, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, jsonb, serial, varchar, date } from "drizzle-orm/pg-core";
 import { pgTableCreator, index } from "drizzle-orm/pg-core";
 
 /**
@@ -52,6 +52,7 @@ export const matches = createTable(
       .references(() => students.id),
     totalMeetings: integer("totalMeetings"),
     meetingsCompleted: integer("meetingsCompleted"),
+    frequency: integer("frequency"),
   },
   (example) => ({
     mentorIdIndex: index("mentorId_idx").on(example.mentorId),
@@ -70,6 +71,7 @@ export const meetings = createTable(
       .references(() => matches.id),
     estimatedTime: integer("estimatedTime").notNull(),
     meetingNotes: varchar("meetingNotes", { length: 1000 }).notNull(),
+    meetingDate: date("meetingDate"),
   },
   (example) => ({
     matchIdIndex: index("matchId_idx").on(example.matchId),

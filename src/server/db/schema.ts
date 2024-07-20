@@ -59,8 +59,7 @@ export const matches = createTable(
     studentIdIndex: index("studentId_idx").on(example.studentId),
   }),
 );
-// ALTER TABLE "mentor_manager_meetings" ALTER COLUMN "estimatedTime" SET NOT NULL;--> statement-breakpoint
-// ALTER TABLE "mentor_manager_meetings" ALTER COLUMN "meetingNotes" SET NOT NULL;--> statement-breakpoint
+
 // Meetings table
 export const meetings = createTable(
   "meetings",
@@ -71,7 +70,7 @@ export const meetings = createTable(
       .references(() => matches.id),
     estimatedTime: integer("estimatedTime").notNull(),
     meetingNotes: varchar("meetingNotes", { length: 1000 }).notNull(),
-    meetingDate: date("meetingDate"),
+    meetingDate: date("meetingDate").notNull(),
   },
   (example) => ({
     matchIdIndex: index("matchId_idx").on(example.matchId),

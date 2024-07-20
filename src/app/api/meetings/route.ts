@@ -29,7 +29,7 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     );
   }
 
-  //schedules $25
+  // Schedules $25
   await sendMoneyToRecipient(mercuryId, 25);
 
   return NextResponse.json(
@@ -51,6 +51,9 @@ const mapFieldsToMeeting = (fields: EventField[]): InsertMeeting => {
       meeting.meetingNotes = field.value as string;
     }
   });
+
+  // Add the current date and time as the meeting date
+  meeting.meetingDate = new Date().toISOString().split("T")[0]; // Format as YYYY-MM-DD
 
   // Check if required fields are present
   if (

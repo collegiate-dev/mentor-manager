@@ -46,13 +46,13 @@ export const matches = createTable(
   "matches",
   {
     id: serial("id").primaryKey(),
-    mentorId: varchar("mentorId", { length: 256 }),
+    mentorId: varchar("mentorId", { length: 256 }).notNull(),
     studentId: integer("studentId")
       .notNull()
       .references(() => students.id),
-    totalMeetings: integer("totalMeetings"),
-    meetingsCompleted: integer("meetingsCompleted"),
-    frequency: integer("frequency"),
+    totalMeetings: integer("totalMeetings").notNull(),
+    meetingsCompleted: integer("meetingsCompleted").notNull(),
+    frequency: integer("frequency").notNull(),
   },
   (example) => ({
     mentorIdIndex: index("mentorId_idx").on(example.mentorId),

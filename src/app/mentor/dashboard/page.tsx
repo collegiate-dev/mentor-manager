@@ -1,6 +1,7 @@
 import { getMatchesByMentorId } from "~/api/getMentorMatches";
 import { getStudent } from "~/api/getStudent";
 import { getMentorDetails } from "~/api/queries";
+import { getDaysSinceMostRecentMeeting } from "~/api/meetingQueries";
 import { auth } from "@clerk/nextjs/server";
 import StudentsClient from "./_components/StudentsClient";
 import CompleteBankingButton from "./_components/CompleteBankingButton";
@@ -30,9 +31,13 @@ export default async function StudentsPage() {
 
     const studentDataPromises = matches.map(async (match) => {
       const student = await getStudent(match.studentId);
+      const daysSinceLastMeeting = await getDaysSinceMostRecentMeeting(
+        match.id,
+      );
       return {
         ...match,
         studentName: student ? student.name : "Unknown",
+        daysSinceLastMeeting: daysSinceLastMeeting ?? null,
       };
     });
 
@@ -41,12 +46,29 @@ export default async function StudentsPage() {
       `Matches with student names: ${JSON.stringify(matchesWithStudentNames)}`,
     );
 
+    const overdueMatches = matchesWithStudentNames.filter(
+      (match) =>
+        match.daysSinceLastMeeting === null ||
+        (match.frequency !== null &&
+          match.daysSinceLastMeeting > match.frequency),
+    );
+
+    const regularMatches = matchesWithStudentNames.filter(
+      (match) =>
+        match.daysSinceLastMeeting !== null &&
+        (match.frequency === null ||
+          match.daysSinceLastMeeting <= match.frequency),
+    );
+
     return (
       <div className="flex flex-col items-center">
         {!mercuryId ? (
           <CompleteBankingButton userId={userId} />
         ) : (
-          <StudentsClient matches={matchesWithStudentNames} />
+          <StudentsClient
+            overdueMatches={overdueMatches}
+            regularMatches={regularMatches}
+          />
         )}
       </div>
     );

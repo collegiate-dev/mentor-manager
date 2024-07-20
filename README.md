@@ -21,7 +21,7 @@
 
 - [ ] host on digital ocean droplet
 - [ ] add studnets into database
-- [ ] create a way to manage when meetings are supposed to be (Dates and Frequency)
+- [x] create a way to manage when meetings are supposed to be (Dates and Frequency)
 
 ## 1.2 TODO
 

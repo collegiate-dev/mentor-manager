@@ -3,7 +3,11 @@ import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
 import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
 import { sendMoneyToRecipient } from "../mercury/sendMoney/route";
-import { getMentorIdByMatchId, getMercuryIdByMentorId } from "~/api/queries";
+import {
+  getCompensationByMatchId,
+  getMentorIdByMatchId,
+  getMercuryIdByMentorId,
+} from "~/api/queries";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
@@ -29,8 +33,15 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     );
   }
 
-  // Schedules $25
-  await sendMoneyToRecipient(mercuryId, 25);
+  const compensation = await getCompensationByMatchId(meeting.matchId);
+  if (compensation == null) {
+    return NextResponse.json(
+      { message: "compensation amount not found", data: null },
+      { status: 400 },
+    );
+  }
+
+  await sendMoneyToRecipient(mercuryId, compensation);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

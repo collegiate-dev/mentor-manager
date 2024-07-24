@@ -44,6 +44,22 @@ export const getMercuryIdByMentorId = async (
   return result[0]?.mercuryId ?? null;
 };
 
+export const getCompensationByMatchId = async (
+  matchId: number,
+): Promise<number | null> => {
+  const result = await db
+    .select({ compensation: matches.compensation })
+    .from(matches)
+    .where(eq(matches.id, matchId))
+    .limit(1);
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return result[0]?.compensation ?? null;
+};
+
 // Function to get mentorId by matchId
 export const getMentorIdByMatchId = async (
   matchId: number,

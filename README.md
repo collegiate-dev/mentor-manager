@@ -20,7 +20,7 @@
 ## 1.11 Launch TODOS Counselors
 
 - [ ] host on digital ocean droplet
-- [ ] add studnets into database
+- [x] add studnets into database
 - [x] create a way to manage when meetings are supposed to be (Dates and Frequency)
 
 ## 1.2 TODO
@@ -34,8 +34,8 @@
 
 ### UI/UX Improvements
 
-- [ ] show complete banking info as a task - do not show students until this is complete
-- [ ] center sutdents matchings table
+- [x] show complete banking info as a task - do not show students until this is complete
+- [x] center sutdents matchings table
 - [ ] link table row in (/students) to view of meetings info from meetings db
 
 ## V2

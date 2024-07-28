@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import fetch from "node-fetch";
 import { v4 as uuidv4 } from "uuid";
 
-async function sendPayout(
+export async function sendPayout(
   mentorId: string,
   amount: number,
   phoneNumber: string,

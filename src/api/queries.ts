@@ -96,6 +96,7 @@ export const getMentorDetails = async (
       routingNumber: mentors.routingNumber,
       accountNumber: mentors.accountNumber,
       mercuryId: mentors.mercuryId,
+      phoneNumber: mentors.phoneNumber,
     })
     .from(mentors)
     .where(eq(mentors.id, mentorId))
@@ -108,6 +109,18 @@ export const getMentorDetails = async (
   return result[0] as MentorDetails;
 };
 
+export const updateMentorPhoneNumber = async (mentorDetails: MentorDetails) => {
+  if (!mentorDetails.id) {
+    throw new Error("mentorId is required");
+  }
+  const { phoneNumber } = mentorDetails;
+  await db
+    .update(mentors)
+    .set({
+      phoneNumber,
+    })
+    .where(eq(mentors.id, mentorDetails.id));
+};
 // Updated function to update mercury info
 export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
   if (!mentorDetails.id) {
@@ -145,6 +158,7 @@ export type MentorDetails = {
   routingNumber: string | null;
   accountNumber: string | null;
   mercuryId: string | null;
+  phoneNumber: string | null;
 };
 
 export type MentorMercury = {

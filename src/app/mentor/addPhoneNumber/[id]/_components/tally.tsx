@@ -34,7 +34,7 @@ export const TallyMercury = ({ id, name }: TallyMercuryProps) => {
       }}
     >
       <iframe
-        src={`https://tally.so/r/mZJJa5?transparentBackground=1&id=${id}&name=${name}`}
+        src={`https://tally.so/r/3XqppL?transparentBackground=1&id=${id}&name=${name}`}
         style={{
           width: "100%",
           height: "100%",

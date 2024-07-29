@@ -36,7 +36,7 @@ export async function sendPayout(
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Basic ${authToken}`,
+      Authorization: `Basic ${Buffer.from(`${process.env.CLIENT_ID}:${authToken}`).toString("base64")}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),

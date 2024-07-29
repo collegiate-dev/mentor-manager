@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import { type PhoneNumber } from "~/api/queries";
 
 export async function sendPayout(
-  mentorId: string,
   amount: number,
   phoneNumber: PhoneNumber,
 ): Promise<DotsPayoutResponse> {
@@ -18,7 +17,6 @@ export async function sendPayout(
   const idempotencyKey = uuidv4();
   const payload = {
     amount,
-    user_id: mentorId,
     payee: {
       country_code: phoneNumber.country_code,
       phone_number: phoneNumber.phone_number,
@@ -62,16 +60,15 @@ export async function POST(request: NextRequest) {
     console.log("Request received for sending payout");
 
     const requestData = await request.json();
-    const { recipientId, amount, phoneNumber } = requestData;
+    const { amount, phoneNumber } = requestData;
 
-    if (!recipientId || !amount) {
+    if (!amount || !phoneNumber) {
       throw new Error("Missing required fields");
     }
 
     console.log("Request data parsed:", requestData);
 
     const result = await sendPayout(
-      recipientId as string,
       amount as number,
       phoneNumber as PhoneNumber,
     );

@@ -48,8 +48,7 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     );
   }
 
-  // need to add phone number
-  await sendPayout(mentorId, compensation, phoneNumber);
+  await sendPayout(compensation, phoneNumber);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

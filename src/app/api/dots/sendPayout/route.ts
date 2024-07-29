@@ -9,10 +9,12 @@ export async function sendPayout(
   phoneNumber: PhoneNumber,
 ): Promise<DotsPayoutResponse> {
   const apiUrl = "https://api.dots.dev/api/v2/payouts/send-payout";
-  const authToken = process.env.DOTS_API_TOKEN; // Set your API token in .env
-  if (!authToken) {
-    throw new Error("API token is required in .env");
+  const authToken = process.env.DOTS_API_TOKEN;
+  const clientId = process.env.CLIENT_ID;
+  if (!authToken || !clientId) {
+    throw new Error("API token and/or client ID are required in .env");
   }
+  const authHeader = `Basic ${Buffer.from(`${clientId}:${authToken}`).toString("base64")}`;
   const idempotencyKey = uuidv4();
   const payload = {
     amount,
@@ -36,7 +38,7 @@ export async function sendPayout(
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Basic ${Buffer.from(`${process.env.CLIENT_ID}:${authToken}`).toString("base64")}`,
+      Authorization: authHeader,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),

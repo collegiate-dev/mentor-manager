@@ -8,7 +8,7 @@ export async function sendPayout(
   amount: number,
   phoneNumber: PhoneNumber,
 ): Promise<DotsPayoutResponse> {
-  const apiUrl = "https://api.dots.dev/api/v2/payouts/send-payout";
+  const apiUrl = "https://pls.senddotssandbox.com/api/v2/payouts/send-payout";
   const authToken = process.env.DOTS_API_TOKEN;
   const clientId = process.env.CLIENT_ID;
   if (!authToken || !clientId) {

@@ -4,8 +4,8 @@ import { getMentorDetails } from "~/api/queries";
 import { getDaysSinceMostRecentMeeting } from "~/api/meetingQueries";
 import { auth } from "@clerk/nextjs/server";
 import StudentsClient from "./_components/StudentsClient";
-import CompleteBankingButton from "./_components/CompleteBankingButton";
 import { SignInPage } from "~/components/signInPage";
+import AddPhoneNumberButton from "./_components/AddPhoneNumberButton";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
@@ -23,7 +23,7 @@ export default async function StudentsPage() {
       return <div>Error fetching mentor details. Please try again later.</div>;
     }
 
-    const { mercuryId } = mentorDetails;
+    const { phoneNumber } = mentorDetails;
 
     console.log(`Fetching matches for userId: ${userId}`);
     const matches = await getMatchesByMentorId(userId);
@@ -62,8 +62,8 @@ export default async function StudentsPage() {
 
     return (
       <div className="flex flex-col items-center">
-        {!mercuryId ? (
-          <CompleteBankingButton userId={userId} />
+        {!phoneNumber ? (
+          <AddPhoneNumberButton userId={userId} />
         ) : (
           <StudentsClient
             overdueMatches={overdueMatches}

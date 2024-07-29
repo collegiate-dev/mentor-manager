@@ -18,8 +18,8 @@ export async function sendPayout(
     amount,
     user_id: mentorId,
     payee: {
-      country_code: "1",
-      phone_number: phoneNumber,
+      country_code: phoneNumber.country_code,
+      phone_number: phoneNumber.phone_number,
     },
     // can add a memo to send with the payout link
     // delivery: {

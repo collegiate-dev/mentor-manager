@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
 import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
-
-import { getCompensationByMatchId, getMentorIdByMatchId } from "~/api/queries";
+import {
+  getCompensationByMatchId,
+  getMentorDetails,
+  getMentorIdByMatchId,
+} from "~/api/queries";
 import { sendPayout } from "../dots/sendPayout/route";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
@@ -30,9 +33,23 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
       { status: 400 },
     );
   }
+  const mentorDetails = await getMentorDetails(mentorId);
+  if (!mentorDetails) {
+    return NextResponse.json(
+      { message: "mentorDetails not found", data: null },
+      { status: 400 },
+    );
+  }
+  const { phoneNumber } = mentorDetails;
+  if (!phoneNumber) {
+    return NextResponse.json(
+      { message: "phoneNumber not found", data: null },
+      { status: 400 },
+    );
+  }
 
   // need to add phone number
-  await sendPayout(mentorId, compensation);
+  await sendPayout(mentorId, compensation, phoneNumber);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

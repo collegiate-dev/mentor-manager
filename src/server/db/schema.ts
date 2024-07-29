@@ -23,7 +23,7 @@ export const mentors = createTable(
     routingNumber: varchar("routingNumber", { length: 9 }),
     accountNumber: varchar("accountNumber", { length: 17 }),
     mercuryId: varchar("mercuryId", { length: 256 }),
-    phoneNumber: varchar("phoneNumber"),
+    phoneNumber: jsonb("phoneNumber"),
   },
   (example) => ({
     emailIndex: index("email_idx").on(example.email),

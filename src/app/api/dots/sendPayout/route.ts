@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 import fetch from "node-fetch";
 import { v4 as uuidv4 } from "uuid";
+import { type PhoneNumber } from "~/api/queries";
 
 export async function sendPayout(
   mentorId: string,
   amount: number,
-  phoneNumber: string,
+  phoneNumber: PhoneNumber,
 ): Promise<DotsPayoutResponse> {
   const apiUrl = "https://api.dots.dev/api/v2/payouts/send-payout";
   const authToken = process.env.DOTS_API_TOKEN; // Set your API token in .env
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
     const result = await sendPayout(
       recipientId as string,
       amount as number,
-      phoneNumber as string,
+      phoneNumber as PhoneNumber,
     );
     return NextResponse.json(result);
   } catch (err) {

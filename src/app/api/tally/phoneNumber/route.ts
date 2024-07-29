@@ -49,7 +49,18 @@ const mapFieldsToDetails = (fields: EventField[]): MentorDetails => {
         form.id = field.value as string;
         break;
       case "phoneNumber":
-        form.phoneNumber = field.value as string;
+        const phoneNumber = field.value as string;
+        const phoneParts = phoneNumber.match(/^\+(\d{1,3})(\d{10})$/);
+
+        if (phoneParts) {
+          form.phoneNumber = {
+            country_code: phoneParts[1]!,
+            phone_number: phoneParts[2]!,
+          };
+        } else {
+          console.error("Invalid phone number format");
+        }
+        break;
     }
   });
 

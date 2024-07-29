@@ -148,6 +148,10 @@ export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
 };
 
 // Types
+export type PhoneNumber = {
+  country_code: string;
+  phone_number: string;
+};
 export type MentorDetails = {
   id: string;
   email: string;
@@ -158,7 +162,7 @@ export type MentorDetails = {
   routingNumber: string | null;
   accountNumber: string | null;
   mercuryId: string | null;
-  phoneNumber: string | null;
+  phoneNumber: PhoneNumber | null;
 };
 
 export type MentorMercury = {
@@ -192,17 +196,17 @@ export type ElectronicRoutingInfo = {
   address: Address;
 };
 
-export type MercuryResponse = {
-  id: string;
-  name: string;
-  nickname?: string | null;
-  status: "active" | "deleted";
-  emails: string[];
-  dateLastPaid?: string | null;
-  defaultPaymentMethod: "ACH" | "Check" | "DomesticWire" | "InternationalWire";
-  electronicRoutingInfo?: ElectronicRoutingInfo | null;
-  domesticWireRoutingInfo?: any | null; // Add specific types if needed
-  internationalWireRoutingInfo?: any | null; // Add specific types if needed
-  checkInfo?: any | null; // Add specific types if needed
-  address?: any | null; // Deprecated, add specific types if needed
-};
+// export type MercuryResponse = {
+//   id: string;
+//   name: string;
+//   nickname?: string | null;
+//   status: "active" | "deleted";
+//   emails: string[];
+//   dateLastPaid?: string | null;
+//   defaultPaymentMethod: "ACH" | "Check" | "DomesticWire" | "InternationalWire";
+//   electronicRoutingInfo?: ElectronicRoutingInfo | null;
+//   domesticWireRoutingInfo?: any | null; // Add specific types if needed
+//   internationalWireRoutingInfo?: any | null; // Add specific types if needed
+//   checkInfo?: any | null; // Add specific types if needed
+//   address?: any | null; // Deprecated, add specific types if needed
+// };

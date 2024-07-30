@@ -47,7 +47,9 @@ export const matches = createTable(
   "matches",
   {
     id: serial("id").primaryKey(),
-    mentorId: varchar("mentorId", { length: 256 }).notNull(),
+    mentorId: varchar("mentorId", { length: 256 })
+      .notNull()
+      .references(() => mentors.id),
     studentId: integer("studentId")
       .notNull()
       .references(() => students.id),
@@ -76,5 +78,26 @@ export const meetings = createTable(
   },
   (example) => ({
     matchIdIndex: index("matchId_idx").on(example.matchId),
+  }),
+);
+
+// Applications table
+export const applications = createTable(
+  "applications",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull(),
+    mentorId: varchar("mentorId", { length: 256 })
+      .notNull()
+      .references(() => mentors.id),
+    studentId: integer("studentId")
+      .notNull()
+      .references(() => students.id),
+    type: varchar("type").notNull(),
+    compenstation: integer("compensation").notNull(),
+  },
+  (example) => ({
+    mentorIdIndex: index("mentorId_idx").on(example.mentorId),
+    studentIdIndex: index("studentId_idx").on(example.studentId),
   }),
 );

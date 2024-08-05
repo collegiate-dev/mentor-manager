@@ -1,8 +1,7 @@
-// Retrieve information about all of your recipients
-
+// Retrieve information about all your bank accounts
 import fetch from "node-fetch";
 
-const url = "https://api.mercury.com/api/v1/recipients";
+const url = "https://backend.mercury.com/api/v1/accounts";
 
 const options = {
   method: "GET",

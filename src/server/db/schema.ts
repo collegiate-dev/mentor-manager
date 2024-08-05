@@ -18,10 +18,6 @@ export const mentors = createTable(
     firstname: varchar("firstname", { length: 256 }),
     lastname: varchar("lastname", { length: 256 }),
     paymentMethod: varchar("paymentMethod", { length: 50 }),
-    electronicRoutingInfo: jsonb("electronicRoutingInfo"),
-    electronicAccountType: varchar("electronicAccountType", { length: 50 }),
-    routingNumber: varchar("routingNumber", { length: 9 }),
-    accountNumber: varchar("accountNumber", { length: 17 }),
     mercuryId: varchar("mercuryId", { length: 256 }),
     phoneNumber: jsonb("phoneNumber"),
   },
@@ -59,8 +55,8 @@ export const matches = createTable(
     compensation: integer("compensation"),
   },
   (example) => ({
-    mentorIdIndex: index("mentorId_idx").on(example.mentorId),
-    studentIdIndex: index("studentId_idx").on(example.studentId),
+    mentorIdIndex: index("applications_mentorId_idx").on(example.mentorId),
+    studentIdIndex: index("applications_studentId_idx").on(example.studentId),
   }),
 );
 

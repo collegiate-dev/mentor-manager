@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
 import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
+import { sendMoneyToRecipient } from "../mercury/sendMoney/route";
 import {
   getCompensationByMatchId,
-  getMentorDetails,
   getMentorIdByMatchId,
+  getMercuryIdByMentorId,
 } from "~/api/queries";
-import { sendPayout } from "../dots/sendPayout/route";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
@@ -25,6 +25,13 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
       { status: 400 },
     );
   }
+  const mercuryId = await getMercuryIdByMentorId(mentorId);
+  if (mercuryId === null) {
+    return NextResponse.json(
+      { message: "mercuryId not found", data: null },
+      { status: 400 },
+    );
+  }
 
   const compensation = await getCompensationByMatchId(meeting.matchId);
   if (compensation == null) {
@@ -33,22 +40,8 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
       { status: 400 },
     );
   }
-  const mentorDetails = await getMentorDetails(mentorId);
-  if (!mentorDetails) {
-    return NextResponse.json(
-      { message: "mentorDetails not found", data: null },
-      { status: 400 },
-    );
-  }
-  const { phoneNumber } = mentorDetails;
-  if (!phoneNumber) {
-    return NextResponse.json(
-      { message: "phoneNumber not found", data: null },
-      { status: 400 },
-    );
-  }
 
-  await sendPayout(compensation, phoneNumber);
+  await sendMoneyToRecipient(mercuryId, compensation);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

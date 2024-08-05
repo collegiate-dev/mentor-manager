@@ -91,10 +91,6 @@ export const getMentorDetails = async (
           "fullname",
         ),
       paymentMethod: mentors.paymentMethod,
-      electronicRoutingInfo: mentors.electronicRoutingInfo,
-      electronicAccountType: mentors.electronicAccountType,
-      routingNumber: mentors.routingNumber,
-      accountNumber: mentors.accountNumber,
       mercuryId: mentors.mercuryId,
       phoneNumber: mentors.phoneNumber,
     })
@@ -122,30 +118,30 @@ export const updateMentorPhoneNumber = async (mentorDetails: MentorDetails) => {
     .where(eq(mentors.id, mentorDetails.id));
 };
 // Updated function to update mercury info
-export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
-  if (!mentorDetails.id) {
-    throw new Error("mentorId is required");
-  }
+// export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
+//   if (!mentorDetails.id) {
+//     throw new Error("mentorId is required");
+//   }
 
-  const {
-    paymentMethod,
-    electronicRoutingInfo,
-    electronicAccountType,
-    routingNumber,
-    accountNumber,
-  } = mentorDetails;
+//   const {
+//     paymentMethod,
+//     electronicRoutingInfo,
+//     electronicAccountType,
+//     routingNumber,
+//     accountNumber,
+//   } = mentorDetails;
 
-  await db
-    .update(mentors)
-    .set({
-      paymentMethod,
-      electronicRoutingInfo,
-      electronicAccountType,
-      routingNumber,
-      accountNumber,
-    })
-    .where(eq(mentors.id, mentorDetails.id));
-};
+//   await db
+//     .update(mentors)
+//     .set({
+//       paymentMethod,
+//       electronicRoutingInfo,
+//       electronicAccountType,
+//       routingNumber,
+//       accountNumber,
+//     })
+//     .where(eq(mentors.id, mentorDetails.id));
+// };
 
 // Types
 export type PhoneNumber = {
@@ -157,10 +153,6 @@ export type MentorDetails = {
   email: string;
   fullname: string;
   paymentMethod: string | null;
-  electronicRoutingInfo: Address | null;
-  electronicAccountType: string | null;
-  routingNumber: string | null;
-  accountNumber: string | null;
   mercuryId: string | null;
   phoneNumber: PhoneNumber | null;
 };

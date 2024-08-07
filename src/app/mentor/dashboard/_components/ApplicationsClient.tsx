@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/table";
 
 interface Application {
+  studentName: string | null;
   id: number;
   name: string;
   mentorId: string;
@@ -29,7 +30,7 @@ const ApplicationsClient = ({ applications }: ApplicationsClientProps) => {
   const router = useRouter();
 
   const handleButtonClick = (applicationId: number) => {
-    router.push(`/applications/details/${applicationId}`);
+    router.push(`/mentor/completeApplication/${applicationId}`);
   };
 
   return (
@@ -41,12 +42,11 @@ const ApplicationsClient = ({ applications }: ApplicationsClientProps) => {
             <TableCaption>List of all applications</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Mentor ID</TableHead>
-                <TableHead>Student ID</TableHead>
+                <TableHead>Application</TableHead>
+                <TableHead>Student Name</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Compensation</TableHead>
-                <TableHead>View Details</TableHead>
+                <TableHead>Payout</TableHead>
+                <TableHead>Submit</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -55,8 +55,7 @@ const ApplicationsClient = ({ applications }: ApplicationsClientProps) => {
                   <TableCell className="font-medium">
                     {application.name}
                   </TableCell>
-                  <TableCell>{application.mentorId}</TableCell>
-                  <TableCell>{application.studentId}</TableCell>
+                  <TableCell>{application.studentName}</TableCell>
                   <TableCell>{application.type}</TableCell>
                   <TableCell>{application.compensation}</TableCell>
                   <TableCell>
@@ -64,7 +63,7 @@ const ApplicationsClient = ({ applications }: ApplicationsClientProps) => {
                       className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
                       onClick={() => handleButtonClick(application.id)}
                     >
-                      Select
+                      Complete
                     </button>
                   </TableCell>
                 </TableRow>

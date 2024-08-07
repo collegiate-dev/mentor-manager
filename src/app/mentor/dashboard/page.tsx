@@ -6,6 +6,8 @@ import { auth } from "@clerk/nextjs/server";
 import StudentsClient from "./_components/StudentsClient";
 import { SignInPage } from "~/components/signInPage";
 import AddPhoneNumberButton from "./_components/AddPhoneNumberButton";
+import { getApplicationsByMentorId } from "~/api/applicationQueries";
+import ApplicationsClient from "./_components/ApplicationsClient";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
@@ -15,19 +17,17 @@ export default async function StudentsPage() {
   }
 
   try {
-    console.log(`Fetching mentor details for userId: ${userId}`);
+    // fetch mentorDetails
     const mentorDetails = await getMentorDetails(userId);
-    console.log(`Mentor details fetched: ${JSON.stringify(mentorDetails)}`);
-
     if (!mentorDetails) {
       return <div>Error fetching mentor details. Please try again later.</div>;
     }
 
     const { phoneNumber } = mentorDetails;
 
-    console.log(`Fetching matches for userId: ${userId}`);
+    // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);
-    console.log(`Matches fetched: ${JSON.stringify(matches)}`);
+    const applications = await getApplicationsByMentorId(userId);
 
     const studentDataPromises = matches.map(async (match) => {
       const student = await getStudent(match.studentId);
@@ -41,9 +41,24 @@ export default async function StudentsPage() {
       };
     });
 
+    const applicationDataPromises = applications.map(async (application) => {
+      const student = await getStudent(application.studentId);
+      return {
+        ...application,
+        studentName: student ? student.name : "Unknown",
+      };
+    });
+
     const matchesWithStudentNames = await Promise.all(studentDataPromises);
+    const applicationsWithStudentNames = await Promise.all(
+      applicationDataPromises,
+    );
+
     console.log(
       `Matches with student names: ${JSON.stringify(matchesWithStudentNames)}`,
+    );
+    console.log(
+      `Applications with student names: ${JSON.stringify(applicationsWithStudentNames)}`,
     );
 
     const overdueMatches = matchesWithStudentNames.filter(
@@ -65,18 +80,25 @@ export default async function StudentsPage() {
         {!phoneNumber ? (
           <AddPhoneNumberButton userId={userId} />
         ) : (
-          <StudentsClient
-            overdueMatches={overdueMatches}
-            regularMatches={regularMatches}
-          />
+          <>
+            <StudentsClient
+              overdueMatches={overdueMatches}
+              regularMatches={regularMatches}
+            />
+            <ApplicationsClient applications={applicationsWithStudentNames} />
+          </>
         )}
       </div>
     );
   } catch (error) {
-    console.error("Error fetching matches or mentor details:", error);
+    console.error(
+      "Error fetching matches, applications, or mentor details:",
+      error,
+    );
     return (
       <div>
-        Error fetching matches or mentor details. Please try again later.
+        Error fetching matches, applications, or mentor details. Please try
+        again later.
       </div>
     );
   }

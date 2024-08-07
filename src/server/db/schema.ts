@@ -90,7 +90,7 @@ export const applications = createTable(
       .notNull()
       .references(() => students.id),
     type: varchar("type").notNull(),
-    compenstation: integer("compensation").notNull(),
+    compensation: integer("compensation").notNull(),
   },
   (example) => ({
     mentorIdIndex: index("mentorId_idx").on(example.mentorId),

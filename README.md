@@ -53,3 +53,8 @@ I am writing this out for initial testing purposes there should be a guided onbo
 2. Ensure that they are added to the mentors db in vercel-postgres under the mentors table
 3. Have them fill out the tally for mercury onboarding
 4. Ensure that the info is in vercel-postgres
+
+## Agrim Feedback
+
+- [ ] On tally show the type (PM, counselor, editor, am, etc)
+- [ ] Mercury memo (Student Name, Service Provided (PM, counselor, editor, application info), Meeting MEETING NUMBER (if meeting))

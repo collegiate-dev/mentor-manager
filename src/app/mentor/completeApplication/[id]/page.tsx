@@ -3,7 +3,7 @@ import { TallyPM } from "./_components/tally";
 import { getStudent } from "~/api/getStudent";
 import { SignInPage } from "~/components/signInPage";
 import { getUserFirstName } from "~/api/getUserFirstName";
-import { getApplicationById } from "~/api/applicationQueries";
+import { getApplicationByApplicationId } from "~/api/applicationQueries";
 
 export default async function editor({ params }: { params: { id: string } }) {
   const applicationId = Number(params.id);
@@ -12,7 +12,7 @@ export default async function editor({ params }: { params: { id: string } }) {
     return <div>Invalid. Contact Ishaan for support at 9259643840</div>;
   }
 
-  const application = await getApplicationById(applicationId);
+  const application = await getApplicationByApplicationId(applicationId);
   if (!application) {
     return <div>No Application Found</div>;
   }

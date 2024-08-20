@@ -53,6 +53,7 @@ export const matches = createTable(
     meetingsCompleted: integer("meetingsCompleted").notNull(),
     frequency: integer("frequency").notNull(),
     compensation: integer("compensation"),
+    type: varchar("type"),
   },
   (example) => ({
     mentorIdIndex: index("applications_mentorId_idx").on(example.mentorId),

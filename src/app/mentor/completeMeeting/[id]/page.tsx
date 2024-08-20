@@ -17,6 +17,8 @@ export default async function PM({ params }: { params: { id: string } }) {
   const match = await getMatchById(matchId);
   let studentName = "Unknown";
 
+  const type = match?.type ?? "Unknown";
+
   if (match) {
     const student = await getStudent(match.studentId);
     studentName = student?.name ?? "Unknown";
@@ -35,6 +37,7 @@ export default async function PM({ params }: { params: { id: string } }) {
           id={params.id}
           studentName={studentName}
           mentorName={mentorName}
+          type={type}
         />
       </SignedIn>
       <SignedOut>

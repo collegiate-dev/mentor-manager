@@ -6,9 +6,15 @@ export interface TallyPMProps {
   id: string;
   studentName: string;
   mentorName: string;
+  type: string;
 }
 
-export const TallyPM = ({ id, studentName, mentorName }: TallyPMProps) => {
+export const TallyPM = ({
+  id,
+  studentName,
+  mentorName,
+  type,
+}: TallyPMProps) => {
   return (
     <div
       style={{
@@ -20,7 +26,7 @@ export const TallyPM = ({ id, studentName, mentorName }: TallyPMProps) => {
       }}
     >
       <iframe
-        src={`https://tally.so/r/mB1vEe?transparentBackground=1&matchId=${id}&studentName=${studentName}&mentorName=${mentorName}`}
+        src={`https://tally.so/r/mB1vEe?transparentBackground=1&matchId=${id}&studentName=${studentName}&mentorName=${mentorName}&type=${type}`}
         style={{
           width: "100%",
           height: "100%",

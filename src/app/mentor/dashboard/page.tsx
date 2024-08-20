@@ -24,6 +24,7 @@ export default async function StudentsPage() {
     }
 
     const { phoneNumber } = mentorDetails;
+    const { mercuryId } = mentorDetails;
 
     // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);
@@ -77,8 +78,10 @@ export default async function StudentsPage() {
 
     return (
       <div className="flex flex-col items-center">
-        {!phoneNumber ? (
-          <AddPhoneNumberButton userId={userId} />
+        {!mercuryId ? (
+          <p>
+            Please complete mercury details that have been sent to your email
+          </p>
         ) : (
           <>
             <StudentsClient

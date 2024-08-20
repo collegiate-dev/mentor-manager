@@ -19,18 +19,17 @@
 
 ## 1.11 Launch TODOS Counselors
 
-- [ ] host on digital ocean droplet
 - [x] add studnets into database
 - [x] create a way to manage when meetings are supposed to be (Dates and Frequency)
 
 ## 1.2 TODO
 
 - [ ] add roles and middleware to protect routes (https://clerk.com/docs/references/nextjs/clerk-middleware)
-- [ ] fix TS and ES Lint issues (particular in route.ts)
+- [x] fix TS and ES Lint issues (particular in route.ts)
 
 ### Mercury Logic Improvements
 
-- [ ] when a user fills out thier mercury details add directly to mercury and only save the mercuryId (you do not need to save all the other info)
+- [x] when a user fills out thier mercury details add directly to mercury and only save the mercuryId (you do not need to save all the other info)
 
 ### UI/UX Improvements
 

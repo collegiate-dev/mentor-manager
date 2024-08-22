@@ -52,8 +52,8 @@ export const matches = createTable(
     totalMeetings: integer("totalMeetings").notNull(),
     meetingsCompleted: integer("meetingsCompleted").notNull(),
     frequency: integer("frequency").notNull(),
-    compensation: integer("compensation"),
-    type: varchar("type"),
+    compensation: integer("compensation").notNull(),
+    type: varchar("type").notNull(),
   },
   (example) => ({
     mentorIdIndex: index("applications_mentorId_idx").on(example.mentorId),

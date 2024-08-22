@@ -8,6 +8,7 @@ import {
   getMentorIdByMatchId,
   getMercuryIdByMentorId,
 } from "~/api/queries";
+import { getMatchById } from "~/api/getMatch";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
@@ -41,7 +42,18 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     );
   }
 
-  await sendMoneyToRecipient(mercuryId, compensation);
+  const match = getMatchById(meeting.matchId);
+  if (match === null) {
+    return NextResponse.json(
+      { message: "match not found", data: null },
+      { status: 400 },
+    );
+  }
+  const { type } = match;
+
+  const memo = `Compensation for ${type} meeting`;
+
+  await sendMoneyToRecipient(mercuryId, compensation, memo);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

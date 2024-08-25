@@ -55,5 +55,5 @@ I am writing this out for initial testing purposes there should be a guided onbo
 
 ## Agrim Feedback
 
-- [ ] On tally show the type (PM, counselor, editor, am, etc)
-- [ ] Mercury memo (Student Name, Service Provided (PM, counselor, editor, application info), Meeting MEETING NUMBER (if meeting))
+- [x] On tally show the type (PM, counselor, editor, am, etc)
+- [x] Mercury memo (Student Name, Service Provided (PM, counselor, editor, application info), Meeting MEETING NUMBER (if meeting))

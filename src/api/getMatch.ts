@@ -9,5 +9,5 @@ export const getMatchById = async (matchId: number) => {
     .where(eq(matches.id, matchId))
     .execute();
 
-  return result.length > 0 ? result[0] : null;
+  return result[0] ?? null;
 };

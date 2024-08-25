@@ -3,57 +3,41 @@ import { tallyHookHandler } from "../_utils/handler";
 import { addMeeting, type InsertMeeting } from "~/server/queries";
 import { incrementMeetingsCompleted } from "~/api/incrementMeetingsCompleted";
 import { sendMoneyToRecipient } from "../mercury/sendMoney/route";
-import {
-  getCompensationByMatchId,
-  getMentorIdByMatchId,
-  getMercuryIdByMentorId,
-} from "~/api/queries";
 import { getMatchById } from "~/api/getMatch";
+import { getStudent } from "~/api/getStudent";
+import { getMentor } from "~/api/getMentor";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const meeting = mapFieldsToMeeting(body.data.fields);
 
+  // [TODO] Combine the two below into one meetingCompleted call
   // Add the meeting to the meetings table
   await addMeeting(meeting);
-
   // Increment the meetingsCompleted count in the matches table
   await incrementMeetingsCompleted(meeting.matchId);
 
-  const mentorId = await getMentorIdByMatchId(meeting.matchId);
-  if (mentorId === null) {
-    return NextResponse.json(
-      { message: "mentorId not found", data: null },
-      { status: 400 },
-    );
-  }
-  const mercuryId = await getMercuryIdByMentorId(mentorId);
-  if (mercuryId === null) {
-    return NextResponse.json(
-      { message: "mercuryId not found", data: null },
-      { status: 400 },
-    );
-  }
-
-  const compensation = await getCompensationByMatchId(meeting.matchId);
-  if (compensation == null) {
-    return NextResponse.json(
-      { message: "compensation amount not found", data: null },
-      { status: 400 },
-    );
-  }
-
-  const match = getMatchById(meeting.matchId);
+  const match = await getMatchById(meeting.matchId);
   if (match === null) {
     return NextResponse.json(
       { message: "match not found", data: null },
       { status: 400 },
     );
   }
-  const { type } = match;
 
-  const memo = `Compensation for ${type} meeting`;
+  const student = await getStudent(match.studentId);
+  const mentor = await getMentor(match.mentorId);
 
-  await sendMoneyToRecipient(mercuryId, compensation, memo);
+  const mercuryId = mentor?.mercuryId;
+  if (mercuryId === undefined) {
+    return NextResponse.json(
+      { message: "mentor not found", data: null },
+      { status: 400 },
+    );
+  }
+
+  const memo = `Payout for ${student?.name}'s ${match.meetingsCompleted}/${match.totalMeetings} ${match.type} meeting with ${mentor?.firstname} ${mentor?.lastname}`;
+
+  await sendMoneyToRecipient(mercuryId!, match.compensation, memo);
 
   return NextResponse.json(
     { message: "awesome sauce", data: null },

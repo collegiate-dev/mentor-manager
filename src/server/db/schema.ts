@@ -1,4 +1,11 @@
-import { integer, jsonb, serial, varchar, date } from "drizzle-orm/pg-core";
+import {
+  integer,
+  jsonb,
+  serial,
+  varchar,
+  date,
+  boolean,
+} from "drizzle-orm/pg-core";
 import { pgTableCreator, index } from "drizzle-orm/pg-core";
 
 /**
@@ -92,9 +99,36 @@ export const applications = createTable(
       .references(() => students.id),
     type: varchar("type").notNull(),
     compensation: integer("compensation").notNull(),
+    completed: boolean("completed"),
   },
   (example) => ({
     mentorIdIndex: index("mentorId_idx").on(example.mentorId),
     studentIdIndex: index("studentId_idx").on(example.studentId),
+  }),
+);
+
+// EditorMicroservices table
+export const editorMicroservices = createTable(
+  "editorMicroservices",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull(),
+    mentorId: varchar("mentorId", { length: 256 })
+      .notNull()
+      .references(() => mentors.id),
+    studentId: integer("studentId")
+      .notNull()
+      .references(() => students.id),
+    type: varchar("type").notNull(),
+    compensation: integer("compensation").notNull(),
+    completed: boolean("completed"),
+  },
+  (example) => ({
+    mentorIdIndex: index("editorMicroservices_mentorId_idx").on(
+      example.mentorId,
+    ), // Renamed index
+    studentIdIndex: index("editorMicroservices_studentId_idx").on(
+      example.studentId,
+    ), // Renamed index
   }),
 );

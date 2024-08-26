@@ -6,11 +6,15 @@
 
 # Editor Functionality and Onboarding
 
+- [x] Create schema for microservice
+- [x] Add completed as a bool for both applications and microservice table
 - [ ] Editor vs microservice table (differentiate and two different tally forms)
 - [ ] Create an onboarding loom and make sure all the editors are onboarded
 
 # Counselor fixes
 
+- [ ] Add a button to do mercury request if no mercuryId (check dashboard page)
+- [ ] Add phone number form back in
 - [ ] After forms are completed add redirect back to dashboard
 - [ ] Add toast for confirmation
 - [ ] Add an alert when a counslor is trying to mark complete for a meeting that is not overdue

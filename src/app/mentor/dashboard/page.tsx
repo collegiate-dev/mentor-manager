@@ -6,8 +6,12 @@ import { auth } from "@clerk/nextjs/server";
 import StudentsClient from "./_components/StudentsClient";
 import { SignInPage } from "~/components/signInPage";
 import AddPhoneNumberButton from "./_components/AddPhoneNumberButton";
-import { getApplicationsByMentorId } from "~/api/applicationQueries";
+import {
+  getApplicationsByMentorId,
+  getEditorMicroservicesByMentorId,
+} from "~/api/applicationQueries";
 import ApplicationsClient from "./_components/ApplicationsClient";
+import EditorMicroserviceClient from "./_components/EditorMicroserviceClient";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
@@ -29,6 +33,7 @@ export default async function StudentsPage() {
     // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);
     const applications = await getApplicationsByMentorId(userId);
+    const editorMicroservices = await getEditorMicroservicesByMentorId(userId);
 
     const studentDataPromises = matches.map(async (match) => {
       const student = await getStudent(match.studentId);
@@ -50,16 +55,22 @@ export default async function StudentsPage() {
       };
     });
 
+    const editorMicroservicesDataPromises = editorMicroservices.map(
+      async (application) => {
+        const student = await getStudent(application.studentId);
+        return {
+          ...application,
+          studentName: student ? student.name : "Unknown",
+        };
+      },
+    );
+
     const matchesWithStudentNames = await Promise.all(studentDataPromises);
     const applicationsWithStudentNames = await Promise.all(
       applicationDataPromises,
     );
-
-    console.log(
-      `Matches with student names: ${JSON.stringify(matchesWithStudentNames)}`,
-    );
-    console.log(
-      `Applications with student names: ${JSON.stringify(applicationsWithStudentNames)}`,
+    const editorMicroservicesWithStudentNames = await Promise.all(
+      editorMicroservicesDataPromises,
     );
 
     const overdueMatches = matchesWithStudentNames.filter(
@@ -89,6 +100,9 @@ export default async function StudentsPage() {
               regularMatches={regularMatches}
             />
             <ApplicationsClient applications={applicationsWithStudentNames} />
+            <EditorMicroserviceClient
+              applications={editorMicroservicesWithStudentNames}
+            />
           </>
         )}
       </div>

@@ -22,11 +22,11 @@ interface EditorMicroservice {
 }
 
 interface EditorMicroserviceClientProps {
-  essays: EditorMicroservice[];
+  applications: EditorMicroservice[];
 }
 
 const EditorMicroserviceClient = ({
-  essays,
+  applications,
 }: EditorMicroserviceClientProps) => {
   const router = useRouter();
 
@@ -36,14 +36,14 @@ const EditorMicroserviceClient = ({
 
   return (
     <div className="flex flex-col items-center">
-      {essays.length > 0 && (
+      {applications.length > 0 && (
         <div className="w-full">
           <h2>Essay Microservices</h2>
           <Table>
             <TableCaption>List of all Essay Microservices</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead>Essays</TableHead>
+                <TableHead>applications</TableHead>
                 <TableHead>Student Name</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Payout</TableHead>
@@ -51,7 +51,7 @@ const EditorMicroserviceClient = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {essays.map((essay) => (
+              {applications.map((essay) => (
                 <TableRow key={essay.id}>
                   <TableCell className="font-medium">{essay.name}</TableCell>
                   <TableCell>{essay.studentName}</TableCell>

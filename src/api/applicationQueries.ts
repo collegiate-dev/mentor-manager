@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm/expressions";
 import { db } from "~/server/db";
-import { applications } from "~/server/db/schema";
+import { applications, editorMicroservices } from "~/server/db/schema";
 
 export const getApplicationByApplicationId = async (applicationId: number) => {
   const result = await db
@@ -17,6 +17,15 @@ export const getApplicationsByMentorId = async (mentorId: string) => {
     .select()
     .from(applications)
     .where(eq(applications.mentorId, mentorId));
+
+  return result;
+};
+
+export const getEditorMicroservicesByMentorId = async (mentorId: string) => {
+  const result = await db
+    .select()
+    .from(editorMicroservices)
+    .where(eq(editorMicroservices.mentorId, mentorId));
 
   return result;
 };

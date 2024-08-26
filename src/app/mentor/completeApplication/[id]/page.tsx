@@ -2,8 +2,8 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { TallyPM } from "./_components/tally";
 import { getStudent } from "~/api/getStudent";
 import { SignInPage } from "~/components/signInPage";
-import { getUserFirstName } from "~/api/getUserFirstName";
 import { getApplicationByApplicationId } from "~/api/applicationQueries";
+import { getMentor } from "~/api/getMentor";
 
 export default async function editor({ params }: { params: { id: string } }) {
   const applicationId = Number(params.id);
@@ -17,16 +17,14 @@ export default async function editor({ params }: { params: { id: string } }) {
     return <div>No Application Found</div>;
   }
 
-  const applicationName = application.name;
   const student = await getStudent(application.studentId);
-  const studentName = student?.name;
-  if (!studentName) {
-    return <div>No student name found</div>;
+  if (!student) {
+    return <div>No student found</div>;
   }
 
-  const mentorName = await getUserFirstName();
-  if (!mentorName) {
-    return <div>Mentor name not found</div>;
+  const mentor = await getMentor(application.mentorId);
+  if (!mentor) {
+    return <div>No mentor found</div>;
   }
 
   return (
@@ -34,9 +32,9 @@ export default async function editor({ params }: { params: { id: string } }) {
       <SignedIn>
         <TallyPM
           id={params.id}
-          studentName={studentName}
-          mentorName={mentorName}
-          applicationName={applicationName}
+          studentName={student.name!} //shouldnt be null but might have to change schema to make it not null
+          mentorName={mentor.firstname!} //shouldnt be null but might have to change schema to make it not null
+          applicationName={application.name}
         />
       </SignedIn>
       <SignedOut>

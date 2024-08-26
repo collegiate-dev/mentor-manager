@@ -26,7 +26,7 @@ export const TallyPM = ({
       }}
     >
       <iframe
-        src={`https://tally.so/r/w2LKBA?transparentBackground=1&applicationId=${id}&studentName=${studentName}&mentorName=${mentorName}&applicationName=${applicationName}`}
+        src={`https://tally.so/r/mRR1Vl?transparentBackground=1&applicationId=${id}&studentName=${studentName}&mentorName=${mentorName}&applicationName=${applicationName}`}
         style={{
           width: "100%",
           height: "100%",

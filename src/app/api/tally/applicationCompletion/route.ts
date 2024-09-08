@@ -43,8 +43,10 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
       "Error: student or mentor not found for applicationId:",
       application.id,
       application.studentId,
-      application.mentorId
+      application.mentorId,
     );
+    return response;
+  }
 
   const mercuryId = mentor?.mercuryId;
   if (mercuryId === undefined) {

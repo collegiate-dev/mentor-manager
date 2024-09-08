@@ -41,7 +41,11 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
       { message: "mentor not found", data: null },
       { status: 400 },
     );
-    console.log("Error: mentor not found for applicationId:", application.id);
+    console.log(
+      "Error: mentor not found for applicationId:",
+      application.id,
+      mentor?.mercuryId,
+    );
     return response;
   }
 

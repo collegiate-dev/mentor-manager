@@ -54,8 +54,8 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     );
     console.log(
       "Error: mentor not found for applicationId:",
-      application.id,
-      mentor?.mercuryId,
+      application,
+      mentor,
     );
     return response;
   }
@@ -63,8 +63,9 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const memo = `Payout for ${student?.name}'s ${application.name} of type: ${application.type} with ${mentor?.firstname} ${mentor?.lastname}`;
 
   await sendMoneyToRecipient(mercuryId!, application.compensation, memo);
+
   return NextResponse.json(
-    { message: "awesome-sauce", data: null },
+    { message: "awesome sauce", data: null },
     { status: 200 },
   );
 });

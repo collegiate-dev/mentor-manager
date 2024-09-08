@@ -52,6 +52,8 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 const mapFieldsToMeeting = (fields: EventField[]): InsertApplication => {
   const application: Partial<InsertApplication> = {};
 
+  console.log("Fields received:", fields); // Log the fields received
+
   fields.forEach((field) => {
     if (field.label === "applicationId") {
       application.id = parseInt(field.value as string, 10);
@@ -60,8 +62,13 @@ const mapFieldsToMeeting = (fields: EventField[]): InsertApplication => {
     }
   });
 
+  console.log("Mapped application:", application); // Log the mapped application
+
   // Check if required fields are present
   if (application.id === undefined || application.name === undefined) {
+    console.error(
+      "Missing required fields: applicationId and/or applicationName",
+    );
     throw new Error("Missing required fields: matchId and/or name");
   }
 

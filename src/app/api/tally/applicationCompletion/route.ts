@@ -12,20 +12,24 @@ import {
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
   const application = mapFieldsToMeeting(body.data.fields);
   if (application.id === undefined) {
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "applicationId not found", data: null },
       { status: 400 },
     );
+    console.log("Error: applicationId not found. Response:", response);
+    return response;
   }
 
   await completeApplication(application.id);
 
   const match = await getApplicationByApplicationId(application.id);
   if (match === null) {
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "match not found", data: null },
       { status: 400 },
     );
+    console.log("Error: match not found for applicationId:", application.id);
+    return response;
   }
 
   const student = await getStudent(application.studentId);
@@ -33,10 +37,12 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 
   const mercuryId = mentor?.mercuryId;
   if (mercuryId === undefined) {
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "mentor not found", data: null },
       { status: 400 },
     );
+    console.log("Error: mentor not found for applicationId:", application.id);
+    return response;
   }
 
   const memo = `Payout for ${student?.name}'s ${application.name} of type: ${application.type} with ${mentor?.firstname} ${mentor?.lastname}`;

@@ -29,3 +29,13 @@ export const getEditorMicroservicesByMentorId = async (mentorId: string) => {
 
   return result;
 };
+
+// mark application as completed
+// can later add more functionality to add to a completed application table
+export const completeApplication = async (applicationId: number) => {
+  await db
+    .update(applications)
+    .set({ completed: true })
+    .where(eq(applications.id, applicationId))
+    .execute();
+};

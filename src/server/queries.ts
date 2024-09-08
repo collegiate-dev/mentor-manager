@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from "./db";
 // import { userAuth } from "./wrapper";
-import { meetings } from "./db/schema";
+import { applications, meetings } from "./db/schema";
 
 // export const addMeeting = userAuth(async (_authContext, meeting: Meeting) => {
 //   // const { userId } = authContext;
@@ -20,6 +20,8 @@ export const addMeeting = async (meeting: InsertMeeting) => {
 };
 
 export type InsertMeeting = typeof meetings.$inferInsert;
+
+export type InsertApplication = typeof applications.$inferInsert;
 
 // export const getMyTask = userAuth(async (authContext, imgId: number) => {
 //   const { userId } = authContext;

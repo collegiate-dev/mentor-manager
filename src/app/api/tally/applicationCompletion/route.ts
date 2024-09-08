@@ -10,8 +10,8 @@ import {
 } from "~/api/applicationQueries";
 
 export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
-  const application = mapFieldsToMeeting(body.data.fields);
-  if (application.id === undefined) {
+  const tallySubmission = mapFieldsToMeeting(body.data.fields);
+  if (tallySubmission.id === undefined) {
     const response = NextResponse.json(
       { message: "applicationId not found", data: null },
       { status: 400 },
@@ -20,17 +20,15 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
     return response;
   }
 
-  await completeApplication(application.id);
-
-  const match = await getApplicationByApplicationId(application.id);
-  if (match === null) {
-    const response = NextResponse.json(
-      { message: "match not found", data: null },
+  const application = await getApplicationByApplicationId(tallySubmission.id);
+  if (!application) {
+    return NextResponse.json(
+      { message: "application not found", data: null },
       { status: 400 },
     );
-    console.log("Error: match not found for applicationId:", application.id);
-    return response;
   }
+
+  await completeApplication(application.id);
 
   const student = await getStudent(application.studentId);
   const mentor = await getMentor(application.mentorId);
@@ -93,7 +91,7 @@ const mapFieldsToMeeting = (fields: EventField[]): InsertApplication => {
     console.error(
       "Missing required fields: applicationId and/or applicationName",
     );
-    throw new Error("Missing required fields: matchId and/or name");
+    throw new Error("Missing required fields: applicationId and/or name");
   }
 
   return application as InsertApplication;

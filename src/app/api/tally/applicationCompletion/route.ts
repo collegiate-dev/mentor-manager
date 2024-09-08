@@ -43,7 +43,7 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 
   await sendMoneyToRecipient(mercuryId!, application.compensation, memo);
   return NextResponse.json(
-    { message: "awesome sauce", data: null },
+    { message: "awesome-sauce", data: null },
     { status: 200 },
   );
 });

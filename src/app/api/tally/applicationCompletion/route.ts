@@ -34,6 +34,17 @@ export const POST = tallyHookHandler<TallyMeetingEvent>(async (body) => {
 
   const student = await getStudent(application.studentId);
   const mentor = await getMentor(application.mentorId);
+  if (student === null || mentor === null) {
+    const response = NextResponse.json(
+      { message: "student or mentor not found", data: null },
+      { status: 400 },
+    );
+    console.log(
+      "Error: student or mentor not found for applicationId:",
+      application.id,
+      application.studentId,
+      application.mentorId
+    );
 
   const mercuryId = mentor?.mercuryId;
   if (mercuryId === undefined) {

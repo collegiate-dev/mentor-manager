@@ -14,7 +14,6 @@ export async function POST() {
     language: "en",
     required_if_supported_products: [Products.Identity],
     // webhook: "https://sample-web-hook.com",
-    // redirect_uri: "https://domainname.com/oauth-page.html",
     auth: {
       automated_microdeposits_enabled: true,
     },

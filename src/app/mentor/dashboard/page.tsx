@@ -12,6 +12,7 @@ import {
 } from "~/api/applicationQueries";
 import ApplicationsClient from "./_components/ApplicationsClient";
 import EditorMicroserviceClient from "./_components/EditorMicroserviceClient";
+import PlaidLinkButton from "./_components/PlaidLinkButton";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
@@ -29,6 +30,19 @@ export default async function StudentsPage() {
 
     const { phoneNumber } = mentorDetails;
     const { mercuryId } = mentorDetails;
+
+    if (!phoneNumber) {
+      return <AddPhoneNumberButton userId={userId} />;
+    }
+
+    if (!mercuryId) {
+      return (
+        <PlaidLinkButton
+          userId={userId}
+          phoneNumber={phoneNumber.phone_number}
+        />
+      );
+    }
 
     // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);
@@ -89,22 +103,14 @@ export default async function StudentsPage() {
 
     return (
       <div className="flex flex-col items-center">
-        {!mercuryId ? (
-          <p>
-            Please complete mercury details that have been sent to your email
-          </p>
-        ) : (
-          <>
-            <StudentsClient
-              overdueMatches={overdueMatches}
-              regularMatches={regularMatches}
-            />
-            <ApplicationsClient applications={applicationsWithStudentNames} />
-            <EditorMicroserviceClient
-              applications={editorMicroservicesWithStudentNames}
-            />
-          </>
-        )}
+        <StudentsClient
+          overdueMatches={overdueMatches}
+          regularMatches={regularMatches}
+        />
+        <ApplicationsClient applications={applicationsWithStudentNames} />
+        <EditorMicroserviceClient
+          applications={editorMicroservicesWithStudentNames}
+        />
       </div>
     );
   } catch (error) {

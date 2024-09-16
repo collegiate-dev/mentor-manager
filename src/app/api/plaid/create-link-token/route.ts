@@ -1,26 +1,46 @@
 // app/api/plaid/create-link-token/route.ts
 import { NextResponse } from "next/server";
 import plaidClient from "~/lib/plaidClient";
-import { type LinkTokenCreateRequest, CountryCode, Products } from "plaid";
+import {
+  type LinkTokenCreateRequest,
+  CountryCode,
+  Products,
+  HostedLinkDeliveryMethod,
+} from "plaid";
 
-export async function POST() {
-  const request: LinkTokenCreateRequest = {
-    user: {
-      client_user_id: "user-id", // Replace with dynamic user ID from clerk
-    },
-    client_name: "Collegiate Mentor Manager", // has to be less than 30 characters
-    products: [Products.Auth],
-    country_codes: [CountryCode.Us],
-    language: "en",
-    required_if_supported_products: [Products.Identity],
-    // webhook: "https://sample-web-hook.com",
-    auth: {
-      automated_microdeposits_enabled: true,
-    },
-  };
-
+export async function POST(request: Request) {
   try {
-    const response = await plaidClient.linkTokenCreate(request);
+    // Parse the incoming request body
+    const { client_user_id, phone_number } = await request.json();
+
+    if (!client_user_id || !phone_number) {
+      return NextResponse.json(
+        { error: "Missing client_user_id or phone_number" },
+        { status: 400 },
+      );
+    }
+
+    // Create the request object
+    const plaidRequest: LinkTokenCreateRequest = {
+      user: {
+        client_user_id, // Dynamically use the client_user_id from the request body
+        phone_number, // Dynamically use the phone number from the request body
+      },
+      client_name: "Collegiate Mentor Manager", // Less than 30 characters
+      products: [Products.Auth], // Ensure you're using 'auth' to get routing/account numbers
+      country_codes: [CountryCode.Us],
+      language: "en",
+      hosted_link: {
+        delivery_method: HostedLinkDeliveryMethod.Sms, // Send via SMS
+        completion_redirect_uri: "https://wonderwallet.com/redirect", // Redirect URI after completion
+        is_mobile_app: false,
+        url_lifetime_seconds: 900, // Link lifetime in seconds (15 minutes)
+      },
+      webhook: "https://wonderwallet.com/webhook_receiver", // Optional webhook for notifications
+    };
+
+    // Call the Plaid API to create the link token
+    const response = await plaidClient.linkTokenCreate(plaidRequest);
     const linkToken = response.data.link_token;
 
     // Return the link_token to the client

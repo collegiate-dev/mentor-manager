@@ -35,14 +35,14 @@ export default async function StudentsPage() {
       return <AddPhoneNumberButton userId={userId} />;
     }
 
-    if (!mercuryId) {
-      return (
-        <PlaidLinkButton
-          userId={userId}
-          phoneNumber={phoneNumber.phone_number}
-        />
-      );
-    }
+    // if (!mercuryId) {
+    //   return (
+    //     <PlaidLinkButton
+    //       userId={userId}
+    //       phoneNumber={phoneNumber.phone_number}
+    //     />
+    //   );
+    // }
 
     // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);

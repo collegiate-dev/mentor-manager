@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm/expressions";
+import { eq, ne, and } from "drizzle-orm/expressions";
 import { db } from "~/server/db";
 import { applications, editorMicroservices } from "~/server/db/schema";
 
@@ -12,21 +12,36 @@ export const getApplicationByApplicationId = async (applicationId: number) => {
   return result.length > 0 ? result[0] : null;
 };
 
+// getApplicationByMentorId(mentorId)
+// mentorId is the id of the mentor from clerk and in the mentors table
+// returns all the applications that are not completed for the given mentor
 export const getApplicationsByMentorId = async (mentorId: string) => {
   const result = await db
     .select()
     .from(applications)
-    .where(eq(applications.mentorId, mentorId));
+    .where(
+      and(
+        eq(applications.mentorId, mentorId),
+        ne(applications.completed, true),
+      ),
+    );
 
   return result;
 };
 
+// getEditorMicroservicesByMentorId(mentorId)
+// mentorId is the id of the mentor from clerk and in the mentors table
+// returns all the editor microservices that are not completed for the given mentor
 export const getEditorMicroservicesByMentorId = async (mentorId: string) => {
   const result = await db
     .select()
     .from(editorMicroservices)
-    .where(eq(editorMicroservices.mentorId, mentorId));
-
+    .where(
+      and(
+        eq(editorMicroservices.mentorId, mentorId),
+        ne(editorMicroservices.completed, true),
+      ),
+    );
   return result;
 };
 

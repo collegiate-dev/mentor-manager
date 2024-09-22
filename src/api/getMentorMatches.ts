@@ -1,4 +1,4 @@
-import { eq, and, gte } from "drizzle-orm/expressions";
+import { eq, and, lt } from "drizzle-orm/expressions";
 import { db } from "~/server/db";
 import { matches } from "~/server/db/schema";
 
@@ -13,7 +13,7 @@ export const getMatchesByMentorId = async (mentorId: string) => {
     .where(
       and(
         eq(matches.mentorId, mentorId),
-        gte(matches.meetingsCompleted, matches.totalMeetings),
+        lt(matches.meetingsCompleted, matches.totalMeetings),
       ),
     );
 

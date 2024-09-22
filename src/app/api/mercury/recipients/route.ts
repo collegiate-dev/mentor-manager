@@ -17,11 +17,3 @@ fetch(url, options)
   .then((res) => res.json())
   .then((json) => console.log(json))
   .catch((err) => console.error("error:" + err));
-
-export function POST() {
-  return new Response("POST Method Not Allowed", { status: 405 });
-}
-
-export function PUT() {
-  return new Response("PUT Method Not Allowed", { status: 405 });
-}

@@ -92,7 +92,7 @@ const StudentsClient = ({
                 <TableHead>Total Meetings</TableHead>
                 <TableHead>Frequency</TableHead>
                 <TableHead>Days Since Last Meeting</TableHead>
-                <TableHead>Mark Complete</TableHead>
+                {/* <TableHead>Mark Complete</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -105,14 +105,14 @@ const StudentsClient = ({
                   <TableCell>{match.totalMeetings}</TableCell>
                   <TableCell>{match.frequency}</TableCell>
                   <TableCell>{match.daysSinceLastMeeting}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <button
                       className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
                       onClick={() => handleButtonClick(match.id)}
                     >
                       Select
                     </button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

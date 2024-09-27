@@ -4,6 +4,8 @@
 import React, { useState } from "react";
 
 interface CreateLinkTokenResponse {
+  expiration: string;
+  hosted_link_url: string;
   link_token: string;
   error: string;
 }
@@ -33,13 +35,13 @@ export default function PlaidLinkButton({
       });
 
       const data: CreateLinkTokenResponse = await response.json();
-      if (data.link_token) {
-        setHostedUrl(data.link_token);
+      if (data.hosted_link_url) {
+        setHostedUrl(data.hosted_link_url);
       } else {
-        console.error("Error creating link token:", data.error);
+        console.error("Error no hosted_link_url", data.error);
       }
     } catch (error) {
-      console.error("Failed to create link token:", error);
+      console.error("Failed to create hosted_link_url", error);
     } finally {
       setIsLoading(false);
     }

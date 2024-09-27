@@ -31,7 +31,8 @@ export async function POST(request: Request) {
         is_mobile_app: false,
         url_lifetime_seconds: 900, // Link lifetime in seconds (15 minutes)
       },
-      webhook: "https://wonderwallet.com/webhook_receiver", // Optional webhook for notifications
+      webhook:
+        "https://fc52-169-233-211-207.ngrok-free.app/api/plaid/get-link-token", // Optional webhook for notifications
     };
 
     // Call the Plaid API to create the link token
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
     const linkToken = response.data.link_token;
 
     // Return the link_token to the client
-    return NextResponse.json({ link_token: linkToken });
+    return NextResponse.json(response.data);
   } catch (error) {
     console.error("Error creating link token:", error);
 

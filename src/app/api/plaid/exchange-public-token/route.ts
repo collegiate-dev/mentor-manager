@@ -6,7 +6,7 @@ import { type ItemPublicTokenExchangeRequest } from "plaid";
 export async function POST(request: Request) {
   try {
     // Extract the public_token from the request body
-    const { public_token } = await request.json();
+    const { public_token }: { public_token: string } = await request.json();
 
     if (!public_token) {
       return NextResponse.json(
@@ -30,10 +30,18 @@ export async function POST(request: Request) {
     // Return the accessToken and itemId in the response
     return NextResponse.json({ access_token: accessToken, item_id: itemId });
   } catch (error) {
-    console.error("Error exchanging public token:", error);
-    return NextResponse.json(
-      { error: "Failed to exchange public token" },
-      { status: 500 },
-    );
+    if (error instanceof Error) {
+      console.error("Error exchanging public token:", error.message);
+      return NextResponse.json(
+        { error: "Failed to exchange public token", details: error.message },
+        { status: 500 },
+      );
+    } else {
+      console.error("Unknown error exchanging public token:", error);
+      return NextResponse.json(
+        { error: "Failed to exchange public token", details: "Unknown error" },
+        { status: 500 },
+      );
+    }
   }
 }

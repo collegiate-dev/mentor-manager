@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     // Call the Plaid API to create the link token
     const response = await plaidClient.linkTokenCreate(plaidRequest);
-    const linkToken = response.data.link_token;
+    // const linkToken = response.data.link_token;
 
     // Return the link_token to the client
     return NextResponse.json(response.data);

@@ -28,6 +28,7 @@ export const mentors = createTable(
     mercuryId: varchar("mercuryId", { length: 256 }),
     phoneNumber: jsonb("phoneNumber"),
     plaidAccessToken: varchar("plaidAccessToken"),
+    address: jsonb("address"),
   },
   (example) => ({
     emailIndex: index("email_idx").on(example.email),

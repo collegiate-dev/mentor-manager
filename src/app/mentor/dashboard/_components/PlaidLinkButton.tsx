@@ -54,34 +54,18 @@ export default function PlaidLinkButton({
     }
   };
 
-  // Set up PlaidLink configuration with the onSuccess callback
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const { open, ready, error } = usePlaidLink({
-    token: linkToken ?? "", // Plaid's link token from the server
-    onSuccess: async (public_token: string) => {
-      console.log("Public Token received:", public_token);
-      await exchangePublicToken(public_token);
-    },
-    onExit: (err, metadata) => {
-      console.error("Plaid Link flow exited", err, metadata);
-    },
-  });
-
   // Function to call the exchange-public-token route
-  const exchangePublicToken = async (publicToken: string) => {
+  const exchangePublicToken = async (publicToken: string, userId: string) => {
     try {
       const response = await fetch("/api/plaid/exchange-public-token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ public_token: publicToken }),
+        body: JSON.stringify({ public_token: publicToken, mentorId: userId }),
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const data: ExchangePublicTokenResponse = await response.json(); // Bypass linting here for unsafe access
-
-      // Safe access after type assertion
+      const data: ExchangePublicTokenResponse = await response.json();
       console.log("Access Token:", data.access_token);
       console.log("Item ID:", data.item_id);
     } catch (error) {
@@ -89,14 +73,28 @@ export default function PlaidLinkButton({
     }
   };
 
+  // Set up PlaidLink configuration
+  const { open, ready, error } = usePlaidLink({
+    token: linkToken ?? "", // Plaid's link token from the server
+    onSuccess: (public_token: string) => {
+      console.log("Public Token received:", public_token);
+      // Wrap the async function call in a non-async function
+      exchangePublicToken(public_token, userId).catch((err) => {
+        console.error("Error in exchangePublicToken:", err);
+      });
+    },
+    onExit: (err, metadata) => {
+      console.error("Plaid Link flow exited", err, metadata);
+    },
+  });
+
   // Safely handle errors from Plaid Link using type checks
   useEffect(() => {
     if (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (error instanceof ErrorEvent) {
-        console.error("Plaid Link Error:", error.message); // Safe to call error.message here
+        console.error("Plaid Link Error:", error.message);
       } else {
-        console.error("Unknown error in Plaid Link:", error); // Handle any unknown error
+        console.error("Unknown error in Plaid Link:", error);
       }
     }
   }, [error]);
@@ -105,8 +103,7 @@ export default function PlaidLinkButton({
   const handleOpenLink = () => {
     try {
       if (typeof open === "function") {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        open(); // Safely call the open function
+        open();
       } else {
         console.error("open is not a function");
       }

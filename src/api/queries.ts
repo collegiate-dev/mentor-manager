@@ -90,6 +90,7 @@ export const getMentorDetails = async (
       mercuryId: mentors.mercuryId,
       phoneNumber: mentors.phoneNumber,
       plaidAccessToken: mentors.plaidAccessToken, // Ensure you select plaidAccessToken
+      address: mentors.address,
     })
     .from(mentors)
     .where(eq(mentors.id, mentorId))
@@ -142,6 +143,7 @@ export const updateMentorDetails = async (
     plaidAccessToken: string | null;
     paymentMethod: string | null;
     mercuryId: string | null;
+    address: Address | null; // Updated to include address
   }> = {};
 
   // Conditionally add each field if it's provided
@@ -165,6 +167,9 @@ export const updateMentorDetails = async (
   }
   if (mentorDetails.mercuryId !== undefined) {
     updateData.mercuryId = mentorDetails.mercuryId;
+  }
+  if (mentorDetails.address !== undefined) {
+    updateData.address = mentorDetails.address; // Add address to the update data
   }
 
   // If no fields are provided, there's nothing to update
@@ -219,6 +224,7 @@ export type MentorDetails = {
   mercuryId: string | null; // Optional field
   phoneNumber: PhoneNumber | null; // JSON field for phone number
   plaidAccessToken: string | null; // Plaid access token
+  address: Address | null;
 };
 
 export type MentorMercury = {

@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../../_utils/handler";
 import {
-  updateMercuryInfo,
   type MentorDetails,
+  updateMentorDetails,
   type Address,
-  addMercuryRecipientId,
 } from "~/api/queries";
-import { addRecipientToMercury } from "~/app/api/mercury/newRecipient/route";
 
 export const POST = tallyHookHandler<TallyBankDetailsEvent>(async (body) => {
   try {
@@ -16,28 +14,12 @@ export const POST = tallyHookHandler<TallyBankDetailsEvent>(async (body) => {
     const mentorDetails = mapFieldsToDetails(body.data.fields);
     console.log("Mentor Details:", mentorDetails);
 
-    // Call updateMercuryInfo with the mapped data
-    if (mentorDetails) {
-      await updateMercuryInfo(mentorDetails);
-    } else {
-      throw new Error("mentorDetails is missing");
-    }
-
-    // Send data to Mercury API to add a recipient
-    const mercuryResponse = await addRecipientToMercury(mentorDetails);
-    // Update the mentor database with the mercuryId
-    if (mercuryResponse.id) {
-      await addMercuryRecipientId(mentorDetails.id, mercuryResponse.id);
-    } else {
-      throw new Error("Mercury response ID is missing");
-    }
-
-    console.log("Mercury Response:", mercuryResponse);
+    // Call updateMentorDetails to save phoneNumber and address to the DB
+    await updateMentorDetails(mentorDetails);
 
     return NextResponse.json(
       {
-        message:
-          "Payload received, mentor updated, and Mercury recipient added",
+        message: "Payload received and mentor updated",
         data: null,
       },
       { status: 200 },
@@ -52,51 +34,42 @@ export const POST = tallyHookHandler<TallyBankDetailsEvent>(async (body) => {
 });
 
 // Function to map the body.data.fields array to a MentorDetails object
-const mapFieldsToDetails = (fields: EventField[]): MentorDetails => {
+const mapFieldsToDetails = (fields: EventField[]): Partial<MentorDetails> => {
   const form: Partial<MentorDetails> = {
-    electronicRoutingInfo: {} as Address,
+    address: {} as Address, // Initialize empty Address object
   };
 
   fields.forEach((field) => {
     switch (field.label) {
       case "id":
         form.id = field.value as string;
-        form.electronicRoutingInfo!.country = "US"; // Adding in the country code directly right now
-        form.paymentMethod = "electronic";
+        form.paymentMethod = "electronic"; // Example of setting a value
+        form.address!.country = "US";
         break;
-      case "electronicAccountType":
-        if (Array.isArray(field.value)) {
-          const selectedOption = field.options?.find(
-            (option) => option.id === (field.value as string[])[0],
-          );
-          if (selectedOption) {
-            form.electronicAccountType = selectedOption.text;
-          }
+      case "phoneNumber":
+        const phoneNumber = field.value as string;
+        const phoneParts = phoneNumber.match(/^\+(\d{1,3})(\d{10})$/);
+
+        if (phoneParts) {
+          form.phoneNumber = {
+            country_code: phoneParts[1]!,
+            phone_number: phoneParts[2]!,
+          };
+        } else {
+          console.error("Invalid phone number format");
         }
         break;
-      case "email":
-        form.email = field.value as string;
-        break;
-      case "name":
-        form.fullname = field.value as string;
-        break;
-      case "routingNumber":
-        form.routingNumber = field.value as string;
-        break;
-      case "accountNumber":
-        form.accountNumber = field.value as string;
-        break;
       case "address1":
-        form.electronicRoutingInfo!.address1 = field.value as string;
+        form.address!.address1 = field.value as string;
         break;
       case "city":
-        form.electronicRoutingInfo!.city = field.value as string;
+        form.address!.city = field.value as string;
         break;
       case "region":
-        form.electronicRoutingInfo!.region = field.value as string;
+        form.address!.region = field.value as string;
         break;
       case "postalCode":
-        form.electronicRoutingInfo!.postalCode = field.value as string;
+        form.address!.postalCode = field.value as string;
         break;
     }
   });
@@ -104,7 +77,7 @@ const mapFieldsToDetails = (fields: EventField[]): MentorDetails => {
   // Check if required fields are present
   checkRequiredFields(form);
 
-  return form as MentorDetails;
+  return form;
 };
 
 // Function to check if required fields are present
@@ -112,25 +85,19 @@ const checkRequiredFields = (form: Partial<MentorDetails>) => {
   if (form.id === undefined) {
     throw new Error("Missing required field: id");
   }
-  if (form.electronicAccountType === undefined) {
-    throw new Error("Missing required field: electronicAccountType");
+  if (form.phoneNumber === undefined) {
+    throw new Error("Missing required field: phoneNumber");
   }
-  if (form.routingNumber === undefined) {
-    throw new Error("Missing required field: routingNumber");
-  }
-  if (form.accountNumber === undefined) {
-    throw new Error("Missing required field: accountNumber");
-  }
-  if (form.electronicRoutingInfo?.address1 === undefined) {
+  if (form.address?.address1 === undefined) {
     throw new Error("Missing required field: address1");
   }
-  if (form.electronicRoutingInfo?.city === undefined) {
+  if (form.address?.city === undefined) {
     throw new Error("Missing required field: city");
   }
-  if (form.electronicRoutingInfo?.region === undefined) {
+  if (form.address?.region === undefined) {
     throw new Error("Missing required field: region");
   }
-  if (form.electronicRoutingInfo?.postalCode === undefined) {
+  if (form.address?.postalCode === undefined) {
     throw new Error("Missing required field: postalCode");
   }
 };

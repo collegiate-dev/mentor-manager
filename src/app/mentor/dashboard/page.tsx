@@ -13,6 +13,7 @@ import {
 import ApplicationsClient from "./_components/ApplicationsClient";
 import EditorMicroserviceClient from "./_components/EditorMicroserviceClient";
 import PlaidLinkButton from "./_components/PlaidLinkButton";
+import AddMentorDetailsButton from "./_components/AddMentorDetailsButton";
 
 export default async function StudentsPage() {
   const { userId } = auth() as { userId: string };
@@ -28,9 +29,11 @@ export default async function StudentsPage() {
       return <div>Error fetching mentor details. Please try again later.</div>;
     }
 
-    const { phoneNumber } = mentorDetails;
-    const { mercuryId } = mentorDetails;
+    const { phoneNumber, mercuryId, address } = mentorDetails;
 
+    if (!address) {
+      return <AddMentorDetailsButton userId={userId} />;
+    }
     if (!phoneNumber) {
       return <AddPhoneNumberButton userId={userId} />;
     }

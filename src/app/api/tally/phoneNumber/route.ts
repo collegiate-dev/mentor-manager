@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import { tallyHookHandler } from "../../_utils/handler";
-import {
-  type MentorDetails,
-  type Address,
-  updateMentorPhoneNumber,
-} from "~/api/queries";
+import { type MentorDetails, updateMentorPhoneNumber } from "~/api/queries";
 
 export const POST = tallyHookHandler<TallyEvent>(async (body) => {
   try {
@@ -14,7 +10,6 @@ export const POST = tallyHookHandler<TallyEvent>(async (body) => {
     const mentorDetails = mapFieldsToDetails(body.data.fields);
     console.log("Mentor Details:", mentorDetails);
 
-    // Call updateMercuryInfo with the mapped data
     if (mentorDetails) {
       await updateMentorPhoneNumber(mentorDetails);
     } else {
@@ -39,9 +34,7 @@ export const POST = tallyHookHandler<TallyEvent>(async (body) => {
 
 // Function to map the body.data.fields array to a MentorDetails object
 const mapFieldsToDetails = (fields: EventField[]): MentorDetails => {
-  const form: Partial<MentorDetails> = {
-    electronicRoutingInfo: {} as Address,
-  };
+  const form: Partial<MentorDetails> = {};
 
   fields.forEach((field) => {
     switch (field.label) {

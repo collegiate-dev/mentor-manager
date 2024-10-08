@@ -12,6 +12,14 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/mercury/add-recipient",
+        destination: process.env.RAILWAY_URL + "/api/mercury/add-recipient",
+      },
+    ];
+  },
 };
 
 export default config;

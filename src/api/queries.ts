@@ -86,25 +86,34 @@ export const getMentorDetails = async (
       email: mentors.email,
       firstname: mentors.firstname,
       lastname: mentors.lastname,
-      fullname:
-        sql<string>`CONCAT(${mentors.firstname}, ' ', ${mentors.lastname})`.as(
-          "fullname",
-        ),
       paymentMethod: mentors.paymentMethod,
       mercuryId: mentors.mercuryId,
       phoneNumber: mentors.phoneNumber,
+      plaidAccessToken: mentors.plaidAccessToken, // Ensure you select plaidAccessToken
+      address: mentors.address,
     })
     .from(mentors)
     .where(eq(mentors.id, mentorId))
     .limit(1);
 
-  if (result.length === 0) {
+  if (!result || result.length === 0 || !result[0]) {
     return null;
   }
 
-  return result[0] as MentorDetails;
+  const mentor = result[0]; // Safely access result[0]
+
+  // Build the full name here
+  const fullname = `${mentor.firstname ?? ""} ${mentor.lastname ?? ""}`.trim(); // Handle null values
+
+  // Return the mentor details including the computed fullname
+  return {
+    ...mentor,
+    fullname, // Add the computed full name
+  } as MentorDetails;
 };
 
+// this is to update the mentor phone number -- however this is inefficent
+// replce this with updateMentorDetails which will be more maintainbale
 export const updateMentorPhoneNumber = async (mentorDetails: MentorDetails) => {
   if (!mentorDetails.id) {
     throw new Error("mentorId is required");
@@ -117,6 +126,64 @@ export const updateMentorPhoneNumber = async (mentorDetails: MentorDetails) => {
     })
     .where(eq(mentors.id, mentorDetails.id));
 };
+
+export const updateMentorDetails = async (
+  mentorDetails: Partial<MentorDetails>,
+) => {
+  if (!mentorDetails.id) {
+    throw new Error("mentorId is required");
+  }
+
+  // Create an empty object to hold the update values
+  const updateData: Partial<{
+    email: string;
+    firstname: string;
+    lastname: string;
+    phoneNumber: PhoneNumber | null;
+    plaidAccessToken: string | null;
+    paymentMethod: string | null;
+    mercuryId: string | null;
+    address: Address | null; // Updated to include address
+  }> = {};
+
+  // Conditionally add each field if it's provided
+  if (mentorDetails.email !== undefined) {
+    updateData.email = mentorDetails.email;
+  }
+  if (mentorDetails.firstname !== undefined) {
+    updateData.firstname = mentorDetails.firstname;
+  }
+  if (mentorDetails.lastname !== undefined) {
+    updateData.lastname = mentorDetails.lastname;
+  }
+  if (mentorDetails.phoneNumber !== undefined) {
+    updateData.phoneNumber = mentorDetails.phoneNumber;
+  }
+  if (mentorDetails.plaidAccessToken !== undefined) {
+    updateData.plaidAccessToken = mentorDetails.plaidAccessToken;
+  }
+  if (mentorDetails.paymentMethod !== undefined) {
+    updateData.paymentMethod = mentorDetails.paymentMethod;
+  }
+  if (mentorDetails.mercuryId !== undefined) {
+    updateData.mercuryId = mentorDetails.mercuryId;
+  }
+  if (mentorDetails.address !== undefined) {
+    updateData.address = mentorDetails.address; // Add address to the update data
+  }
+
+  // If no fields are provided, there's nothing to update
+  if (Object.keys(updateData).length === 0) {
+    throw new Error("No fields to update");
+  }
+
+  // Execute the update query with the dynamically built updateData
+  await db
+    .update(mentors)
+    .set(updateData)
+    .where(eq(mentors.id, mentorDetails.id));
+};
+
 // Updated function to update mercury info
 // export const updateMercuryInfo = async (mentorDetails: MentorDetails) => {
 //   if (!mentorDetails.id) {
@@ -151,10 +218,13 @@ export type PhoneNumber = {
 export type MentorDetails = {
   id: string;
   email: string;
-  fullname: string;
-  paymentMethod: string | null;
-  mercuryId: string | null;
-  phoneNumber: PhoneNumber | null;
+  firstname: string;
+  lastname: string;
+  paymentMethod: string | null; // Optional field
+  mercuryId: string | null; // Optional field
+  phoneNumber: PhoneNumber | null; // JSON field for phone number
+  plaidAccessToken: string | null; // Plaid access token
+  address: Address | null;
 };
 
 export type MentorMercury = {

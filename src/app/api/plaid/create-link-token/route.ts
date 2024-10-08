@@ -1,12 +1,7 @@
 // app/api/plaid/create-link-token/route.ts
 import { NextResponse } from "next/server";
 import plaidClient from "~/lib/plaidClient";
-import {
-  type LinkTokenCreateRequest,
-  CountryCode,
-  Products,
-  HostedLinkDeliveryMethod,
-} from "plaid";
+import { type LinkTokenCreateRequest, CountryCode, Products } from "plaid";
 
 export async function POST(request: Request) {
   try {
@@ -23,28 +18,29 @@ export async function POST(request: Request) {
     // Create the request object
     const plaidRequest: LinkTokenCreateRequest = {
       user: {
-        client_user_id, // Dynamically use the client_user_id from the request body
-        phone_number, // Dynamically use the phone number from the request body
+        client_user_id,
+        phone_number,
       },
       client_name: "Collegiate Mentor Manager", // Less than 30 characters
       products: [Products.Auth], // Ensure you're using 'auth' to get routing/account numbers
       country_codes: [CountryCode.Us],
       language: "en",
       hosted_link: {
-        delivery_method: HostedLinkDeliveryMethod.Sms, // Send via SMS
-        completion_redirect_uri: "https://wonderwallet.com/redirect", // Redirect URI after completion
+        // delivery_method: HostedLinkDeliveryMethod.Sms, // Send via SMS
+        completion_redirect_uri: "https://mentor-manager.vercel.app/", // Redirect URI after completion
         is_mobile_app: false,
         url_lifetime_seconds: 900, // Link lifetime in seconds (15 minutes)
       },
-      webhook: "https://wonderwallet.com/webhook_receiver", // Optional webhook for notifications
+      webhook:
+        "https://fc52-169-233-211-207.ngrok-free.app/api/plaid/get-link-token", // Optional webhook for notifications
     };
 
     // Call the Plaid API to create the link token
     const response = await plaidClient.linkTokenCreate(plaidRequest);
-    const linkToken = response.data.link_token;
+    // const linkToken = response.data.link_token;
 
     // Return the link_token to the client
-    return NextResponse.json({ link_token: linkToken });
+    return NextResponse.json(response.data);
   } catch (error) {
     console.error("Error creating link token:", error);
 

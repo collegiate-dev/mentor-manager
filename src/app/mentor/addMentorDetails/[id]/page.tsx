@@ -35,12 +35,16 @@ export default async function MercurySetup() {
     );
   }
 
-  const { firstname, lastname } = mentorDetails;
+  const { firstname, lastname, email } = mentorDetails;
 
   return (
     <main>
       <SignedIn>
-        <TallyMercury id={userId} name={`${firstname} ${lastname}`} />
+        <TallyMercury
+          id={userId}
+          name={`${firstname} ${lastname}`}
+          email={email}
+        />
       </SignedIn>
       <SignedOut>
         <SignInPage />

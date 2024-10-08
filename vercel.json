@@ -3,6 +3,18 @@
     {
       "source": "/api/mercury/newRecipient",
       "destination": "https://mentor-manager-production-11a5.up.railway.app/api/mercury/newRecipient"
+    },
+    {
+      "source": "/api/plaid/exchange-public-token",
+      "destination": "https://mentor-manager-production-11a5.up.railway.app/api/plaid/exchange-public-token"
+    },
+    {
+      "source": "app/api/mercury/newRecipient",
+      "destination": "https://mentor-manager-production-11a5.up.railway.app/api/mercury/newRecipient"
+    },
+    {
+      "source": "app/api/plaid/exchange-public-token",
+      "destination": "https://mentor-manager-production-11a5.up.railway.app/api/plaid/exchange-public-token"
     }
   ]
 }

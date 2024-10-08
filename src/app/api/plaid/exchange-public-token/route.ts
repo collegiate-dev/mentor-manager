@@ -46,17 +46,20 @@ export async function POST(request: Request) {
 
     // Step 4: add to mercury
     // Ensure `id` is not undefined and pass all mentor details
-    await fetch("/api/mercury/newRecipient", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await fetch(
+      "https://mentor-manager-production-11a5.up.railway.app/api/mercury/newRecipient",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...mentorDetails,
+          plaidAccessToken: accessToken,
+          id: mentorDetails.id,
+        }),
       },
-      body: JSON.stringify({
-        ...mentorDetails,
-        plaidAccessToken: accessToken,
-        id: mentorDetails.id,
-      }),
-    });
+    );
 
     // Step 5: Return success response
     return NextResponse.json({

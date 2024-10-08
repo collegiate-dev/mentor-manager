@@ -1,6 +1,11 @@
 import fetch from "node-fetch";
 import { getPlaidAccountDetails } from "~/app/api/plaid/get-account-details-auth/route";
-import { type MentorDetails, type MercuryResponse } from "~/api/queries";
+import {
+  addMercuryRecipientId,
+  updateMentorDetails,
+  type MentorDetails,
+  type MercuryResponse,
+} from "~/api/queries";
 
 function mapAccountType(plaidType: string): string {
   switch (plaidType) {
@@ -24,7 +29,7 @@ export async function addRecipientToMercury(
     throw new Error("Plaid access token is missing");
   }
 
-  const { routingNumber, accountNumber, accountType, address } =
+  const { routingNumber, accountNumber, accountType } =
     await getPlaidAccountDetails(mentorDetails.plaidAccessToken);
 
   const payload = {
@@ -32,7 +37,7 @@ export async function addRecipientToMercury(
     name: `${mentorDetails.firstname} ${mentorDetails.lastname}`, // Use the full name
     paymentMethod: "electronic",
     electronicRoutingInfo: {
-      address: address || {}, // Use address from Plaid, if available
+      address: mentorDetails.address,
       electronicAccountType: mapAccountType(accountType), // Map the account type correctly
       routingNumber: routingNumber?.toString() ?? "", // Ensure it's a string
       accountNumber: accountNumber,
@@ -62,10 +67,19 @@ export async function addRecipientToMercury(
       );
     }
 
-    const json = await response.json();
+    // Explicitly type the parsed JSON response
+    const json = (await response.json()) as MercuryResponse;
+
+    // Use the correct structure for json.id (assuming json.id exists in the response)
+    if (!json.id) {
+      throw new Error("Mercury response did not include an ID.");
+    }
+
+    await addMercuryRecipientId(mentorDetails.id, json.id);
+
     console.log("Mercury Response:", json); // Log the Mercury response for debugging
 
-    return json as MercuryResponse;
+    return json;
   } catch (err) {
     console.error("Error adding recipient to Mercury:", err);
     throw new Error("Error adding recipient to Mercury");

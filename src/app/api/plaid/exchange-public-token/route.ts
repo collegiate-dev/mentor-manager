@@ -51,7 +51,9 @@ export async function POST(request: Request) {
       {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.MERCURY_SECRET_TOKEN}`,
         },
         body: JSON.stringify({
           ...mentorDetails,

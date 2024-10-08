@@ -46,10 +46,16 @@ export async function POST(request: Request) {
 
     // Step 4: add to mercury
     // Ensure `id` is not undefined and pass all mentor details
-    await addRecipientToMercury({
-      ...mentorDetails,
-      plaidAccessToken: accessToken, // Update plaidAccessToken
-      id: mentorDetails.id, // Ensure id is present and not undefined
+    await fetch("/api/mercury/newRecipient", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...mentorDetails,
+        plaidAccessToken: accessToken,
+        id: mentorDetails.id,
+      }),
     });
 
     // Step 5: Return success response

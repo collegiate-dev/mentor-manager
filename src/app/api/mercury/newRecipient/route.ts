@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import fetch from "node-fetch";
 import { getPlaidAccountDetails } from "~/app/api/plaid/get-account-details-auth/route";
 import {
@@ -82,5 +83,30 @@ export async function addRecipientToMercury(
   } catch (err) {
     console.error("Error adding recipient to Mercury:", err);
     throw new Error("Error adding recipient to Mercury");
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    // Parse the request body to get the mentor details
+    const mentorDetails: MentorDetails = await request.json();
+
+    // Call the addRecipientToMercury function to make the Mercury API request
+    const mercuryResponse = await addRecipientToMercury(mentorDetails);
+
+    // Return a successful response
+    return NextResponse.json(mercuryResponse, { status: 200 });
+  } catch (error) {
+    console.error("Error in /api/mercury/newRecipient:", error);
+
+    let errorMessage = "An unknown error occurred";
+    if (error instanceof Error) {
+      errorMessage = error.message; // Safe to access error.message here
+    }
+
+    return NextResponse.json(
+      { error: "Failed to add recipient to Mercury", details: errorMessage },
+      { status: 500 },
+    );
   }
 }

@@ -38,6 +38,7 @@ export default async function StudentsPage() {
       return <AddPhoneNumberButton userId={userId} />;
     }
 
+    // show plaid button if not mercury id
     if (!mercuryId) {
       return (
         <PlaidLinkButton

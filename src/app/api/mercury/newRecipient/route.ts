@@ -2,7 +2,6 @@ import fetch from "node-fetch";
 import { getPlaidAccountDetails } from "~/app/api/plaid/get-account-details-auth/route";
 import {
   addMercuryRecipientId,
-  updateMentorDetails,
   type MentorDetails,
   type MercuryResponse,
 } from "~/api/queries";

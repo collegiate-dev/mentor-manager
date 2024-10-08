@@ -15,7 +15,7 @@ const config = {
   async rewrites() {
     return [
       {
-        source: "/api/mercury/add-recipient",
+        source: "/app/api/mercury/add-recipient",
         destination: process.env.RAILWAY_URL + "/api/mercury/add-recipient",
       },
     ];

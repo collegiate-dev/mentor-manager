@@ -48,7 +48,6 @@ export default async function StudentsPage() {
       );
     }
 
-
     // fetches matches and applications by userId aka mentorId
     const matches = await getMatchesByMentorId(userId);
     const applications = await getApplicationsByMentorId(userId);

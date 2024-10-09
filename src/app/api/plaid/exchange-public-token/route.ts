@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import plaidClient from "~/lib/plaidClient";
 import { type ItemPublicTokenExchangeRequest } from "plaid";
 import { updateMentorDetails, getMentorDetails } from "~/api/queries";
-import { addRecipientToMercury } from "../../mercury/newRecipient/route";
 
 export async function POST(request: Request) {
   try {

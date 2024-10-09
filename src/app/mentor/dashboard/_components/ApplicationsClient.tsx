@@ -35,7 +35,6 @@ const ApplicationsClient = ({ applications }: ApplicationsClientProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <p>Applications {applications.length}</p>
       {applications.length > 0 && (
         <div className="w-full">
           <h2>Applications</h2>

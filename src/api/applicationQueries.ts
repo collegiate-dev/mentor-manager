@@ -1,4 +1,4 @@
-import { eq, ne, and } from "drizzle-orm/expressions";
+import { eq, ne, and, or, isNull } from "drizzle-orm/expressions";
 import { db } from "~/server/db";
 import { applications, editorMicroservices } from "~/server/db/schema";
 
@@ -22,7 +22,7 @@ export const getApplicationsByMentorId = async (mentorId: string) => {
     .where(
       and(
         eq(applications.mentorId, mentorId),
-        ne(applications.completed, true),
+        or(eq(applications.completed, false), isNull(applications.completed)),
       ),
     );
 
@@ -39,7 +39,10 @@ export const getEditorMicroservicesByMentorId = async (mentorId: string) => {
     .where(
       and(
         eq(editorMicroservices.mentorId, mentorId),
-        ne(editorMicroservices.completed, true),
+        or(
+          eq(editorMicroservices.completed, false),
+          isNull(editorMicroservices.completed),
+        ),
       ),
     );
   return result;

@@ -1,4 +1,4 @@
-import { eq, ne, and, or, isNull } from "drizzle-orm/expressions";
+import { eq, and, or, isNull } from "drizzle-orm/expressions";
 import { db } from "~/server/db";
 import { applications, editorMicroservices } from "~/server/db/schema";
 
